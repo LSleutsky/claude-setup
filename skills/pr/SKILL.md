@@ -1,10 +1,15 @@
 ---
 name: pr
-description: Write a short, human PR description for the current branch. Output only. Manual only.
+description: Write a short, human PR description for the current branch. Runs in a side context so the diff never enters the main session. Output only. Manual only.
 disable-model-invocation: true
 argument-hint: "[base ref, default main] [optional ticket id]"
+context: fork
+agent: general-purpose
+background: false
 allowed-tools: Read Bash(git diff *) Bash(git log *) Bash(git merge-base *) Bash(git branch --show-current)
 ---
+
+You are writing a pull request description. You have no memory of how this code was written; work only from the branch.
 
 Branch: !`git branch --show-current`
 Commits: !`git log --oneline $(git merge-base HEAD main)..HEAD`
@@ -12,7 +17,9 @@ Files: !`git diff --stat $(git merge-base HEAD main)...HEAD`
 
 Arguments: $ARGUMENTS
 
-Read the diff (`git diff <base>...HEAD`) only as far as needed to know what changed and why. Then write the description and stop. Do not edit anything.
+The first argument, if present, is the base ref; default `main`. The second, if present, is a ticket id.
+
+Read `git diff <base>...HEAD` only as far as needed to know what changed and why. Then write the description and stop. Do not edit anything.
 
 ## Shape
 
@@ -57,4 +64,4 @@ Adds an Enrolled column to the participant list, sorted newest first by default.
 Filtering and export are out of scope for this ticket and untouched. Worth a look: the empty state now renders when a study has no participants, which it did not before.
 ```
 
-Output the description inside one fenced block so it can be copied, nothing before it, nothing after it.
+Return the description inside one fenced block and nothing else. It is the only thing the user will see.

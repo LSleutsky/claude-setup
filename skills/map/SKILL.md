@@ -2,12 +2,12 @@
 name: map
 description: Explore this repo once and write its context file outside the repo. Manual only.
 disable-model-invocation: true
-argument-hint: [facts Claude cannot discover, e.g. "backend is ../med-router"]
-allowed-tools: Read Glob Grep Write Edit Bash(basename *) Bash(echo *) Bash(ls *) Bash(git ls-files *)
+argument-hint: "[facts Claude cannot discover, e.g. backend is ../med-router]"
+allowed-tools: Read Glob Grep Write Edit Bash(~/.claude/hooks/repo-key.sh) Bash(echo *) Bash(ls *) Bash(git ls-files *)
 ---
 
-Context file to write: !`echo "$HOME/.claude/context/$(basename "$CLAUDE_PROJECT_DIR").md"`
-Repo: !`basename "$CLAUDE_PROJECT_DIR"`
+Context file to write: !`echo "$HOME/.claude/context/$(~/.claude/hooks/repo-key.sh).md"`
+Repo: !`~/.claude/hooks/repo-key.sh`
 Top level: !`ls -a`
 
 Facts supplied by the user, take these as true: $ARGUMENTS

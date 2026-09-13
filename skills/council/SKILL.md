@@ -9,12 +9,9 @@ Decision under review:
 
 $ARGUMENTS
 
-Run the three advisor subagents `contrarian`, `first-principles`, and `executor` in
-parallel. Give each one only the decision text above, nothing else. They must not see
-each other's output; that isolation is the point.
+Run the three advisor subagents `contrarian`, `first-principles`, and `executor` in parallel. Give each one only the decision text above, nothing else. They must not see each other's output; that isolation is the point.
 
-When all three have returned, show their answers unedited under their names. Then, as
-chairman, deliver the verdict in exactly this shape:
+When all three have returned, show their answers unedited under their names. Then, as chairman, deliver the verdict in exactly this shape:
 
 - Decision: one sentence, yes or no or A or B, no hedging.
 - Biggest risk: one sentence, drawn from the advisors, not new.

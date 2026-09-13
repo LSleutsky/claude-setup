@@ -89,7 +89,8 @@ Bad:
 Good:
 ```ts
 /**
- * Active session, or undefined when logged out.
+ * Active session.
+ * `undefined` when logged out.
  */
 ```
 
