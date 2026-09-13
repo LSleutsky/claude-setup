@@ -2,7 +2,7 @@
 name: pr
 description: Write a short, human PR description for the current branch. Output only. Manual only.
 disable-model-invocation: true
-argument-hint: [base ref, default main] [optional ticket id]
+argument-hint: "[base ref, default main] [optional ticket id]"
 allowed-tools: Read Bash(git diff *) Bash(git log *) Bash(git merge-base *) Bash(git branch --show-current)
 ---
 
