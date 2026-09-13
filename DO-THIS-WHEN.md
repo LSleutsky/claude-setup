@@ -15,7 +15,7 @@
 | Repo changed shape | Refresh the map; notes survive | `/map` |
 | Learned something durable | One line into the context file | `/note <fact>` |
 | End of session | Record done, decided, encountered, open | `/log` or `/log <focus>` |
-| A feature landed, or a TDD is due | Regenerate the design doc from the code; paste to Confluence | `/design-doc` |
+| A feature landed, or a TDD is due | Regenerate the design doc from the code | `/design-doc` |
 
 ## Work
 
