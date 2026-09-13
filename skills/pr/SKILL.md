@@ -12,8 +12,8 @@ allowed-tools: Read Bash(git diff *) Bash(git log *) Bash(git merge-base *) Bash
 You are writing a pull request description. You have no memory of how this code was written; work only from the branch.
 
 Branch: !`git branch --show-current`
-Commits: !`git log --oneline $(git merge-base HEAD main)..HEAD`
-Files: !`git diff --stat $(git merge-base HEAD main)...HEAD`
+Commits: !`git log --oneline main..HEAD`
+Files: !`git diff --stat main...HEAD`
 
 Arguments: $ARGUMENTS
 
