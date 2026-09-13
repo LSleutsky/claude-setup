@@ -13,6 +13,8 @@ paths:
 
 ## JSDoc
 
+- Single-line comments use `//`. Never `/** text */` on one line.
+- Multi-line comments and all doc comments use the block form: `/**` on its own line, each line starting with ` * `, `*/` on its own line. One short sentence per line.
 - Only on exported components, custom hooks, and standalone utility files. Never on `useCallback`, `useEffect`, or helpers defined inside a component body.
 - One sentence per line. Short sentences. Concise, high level, unambiguous.
 - Blank line between the description and the first `@param`. All `@param` lines grouped with no blank lines between them. Blank line between the last `@param` and `@returns`.

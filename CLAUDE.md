@@ -1,9 +1,5 @@
 <!--
-Judgement rules only, language-free. Loaded into every session on every machine.
-Mechanical rules are not here on purpose: formatting, linting and typechecking run
-from hooks/; command gating lives in settings.json; language rules are path-scoped in
-rules/ and cost nothing until a matching file is touched.
-Block-level HTML comments are stripped before injection and cost zero tokens.
+Judgement rules only, language-free. Loaded into every session on every machine. Mechanical rules are not here on purpose: formatting, linting and typechecking run from hooks/; command gating lives in settings.json; language rules are path-scoped in rules/ and cost nothing until a matching file is touched. Block-level HTML comments are stripped before injection and cost zero tokens.
 -->
 
 # Working agreement
@@ -28,20 +24,52 @@ Block-level HTML comments are stripped before injection and cost zero tokens.
 - Ask before creating a new file: propose the name and location first.
 - Never label breakage you caused as pre-existing. Report pre-existing failures in untouched files by file and line; do not fix them without asking.
 - Tests: do not run them unprompted. When a run fails because of your change, fix the code, never the assertion.
+- Commit messages are one line: `type(scope): what changed`, imperative, under 100 characters, no period, no body. `fix(ble): retry pairing after timeout`.
 
 ## Code
 
-- Explicit over implicit. The simplest solution that is obviously correct. No speculative flags, options, or abstractions.
-- Rule of three: tolerate a second copy, extract on the third. Extract earlier only when the duplication is complex or error-prone.
+- Explicit over implicit. Default to the simplest change that is obviously correct. If that change deletes code, delete it.
+- Match the surrounding code exactly: whitespace, brace placement, import grouping and order, naming, how a file is organized. The formatter decides formatting; for everything it does not decide, the file you are in decides. Existing structure is followed, not improved, unless it is itself an unearned pattern on the `Earn it` list.
 - Replace, do not deprecate: when new replaces old, delete the old. No migration shims. Published packages are the exception: deprecate in a minor, remove in the next major. Assume every change is a minor unless told otherwise.
 - Semantic names (`minWithdrawalAmount`, not `min`).
-- Comments explain why, never what. Only for genuinely non-obvious logic. Wrap referenced identifiers in backticks.
 - No silent failures. Never an empty catch: rethrow, return an explicit error state, or pass to the application error handler. Expected failures are modeled as explicit states, not thrown. Domain errors get specific error types. User-facing errors are actionable and non-technical.
 - Leave existing intentional logging in place; update a message only if a structural change made it wrong. No stray debug output in production code.
 - Avoid pathological patterns (accidental O(n^2), redundant requests, redundant re-renders). Beyond that, optimize only with profiling evidence.
 
+## Earn it
+
+Each of these is fine when earned and slop when introduced on first use. The plan states the justification; if it cannot, the pattern is not used.
+
+- A helper, util, or shared function: earned by a third real call site, or by an existing shared folder the codebase already uses for exactly this.
+- A wrapper, adapter, or service around a direct call: earned by two callers that need the same non-trivial behavior around it.
+- An interface or abstract type: earned by a second real implementation.
+- A parameter, flag, or options object: earned by a second caller passing a different value.
+- A hook, context, or store: earned by two components that truly share the state.
+- A new file: earned by the task naming it, or by the plan naming it and being approved.
+- A try/catch: earned by changing what happens next.
+
 ## Writing
 
-- Direct and concise. No padding, no cut corners.
-- Never use em dashes or any non-ASCII character anywhere: prose, markdown, code, comments, doc comments, commit messages. Use a comma or split the sentence. Only exception: code whose purpose is processing such characters.
-- Markdown: italicize text inside conversational parentheses; every code reference in backticks; fenced blocks carry a language tag.
+Answers first. The first sentence answers the question. No preamble, no restating the question, no options nobody asked for, no summary at the end. If one sentence answers it, one sentence is the whole reply.
+
+Comments are rare, short, and sound like a person. First person plain prose, one sentence, only where the why is not obvious from the code. Multi-line comments: one short sentence per line, three lines at most. Never describe what the next line does. Never a banner, header, or section comment. Wrap referenced identifiers in backticks.
+
+Doc comments follow the language rules in `rules/` and are written the way you would say it to the person next to you, not the way documentation reads.
+
+Bad:
+`// This function is responsible for validating the incoming payload and ensuring that all required fields are present before processing.`
+Good:
+`// Reject early so the queue never sees a partial payload.`
+
+Bad:
+`/** Retrieves the current user's active session from the store and returns it, or undefined if no session exists. */`
+Good:
+```
+/**
+ * Active session, or undefined when logged out.
+ */
+```
+
+Never use em dashes or any non-ASCII character anywhere: prose, markdown, code, comments, doc comments, commit messages. Use a comma or split the sentence. Only exception: code whose purpose is processing such characters.
+
+Markdown: italicize text inside conversational parentheses; every code reference in backticks; fenced blocks carry a language tag.
