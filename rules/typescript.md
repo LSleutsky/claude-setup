@@ -19,6 +19,6 @@ paths:
 - One sentence per line. Short sentences. Concise, high level, unambiguous.
 - Blank line between the description and the first `@param`. All `@param` lines grouped with no blank lines between them. Blank line between the last `@param` and `@returns`.
 - `@returns` always carries the type: `@returns {boolean} Whether the device was paired`.
-- One `@example` only when it significantly improves understanding of a complex function.
+- One `@example` only when it significantly improves understanding of a complex function. Blank line between `@example` and `@returns`.
 - Components: a one or two line description, a blank line, then a short `@returns {JSX.Element} ...`.
 - Any identifier referenced in JSDoc or a comment goes in backticks.
