@@ -42,6 +42,7 @@
 |---|---|---|
 | Greenfield | One-page design; slice 1 goes to `/ac` | `/design <what you want>` |
 | A real fork | Three isolated opinions, one verdict | `/council <A or B?>` |
+| A module has absorbed several tickets, or you inherit a repo | Cold look at the shape, not a diff | `/audit [path]` |
 
 ## Corrections
 
