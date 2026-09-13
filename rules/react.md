@@ -19,3 +19,13 @@ paths:
 - Reserve layout space with CSS (`min-w-*`, `min-h-*`, pseudo-elements), never with placeholder characters.
 - Prefer Server Components for data fetching where the framework supports it.
 - Memoization and other optimization only with evidence, never speculatively.
+
+## Performance
+
+- Keep state as close to its use as possible; a re-render storm is a state placement bug, not a memoization gap.
+- Derive, do not store. Never mirror props or query results into state, and never use an effect to compute something that could be computed during render.
+- Lists are keyed by a stable id, never index. Lists that can exceed a few hundred rows are virtualized.
+- Routes and heavy components load lazily. Charts, editors, and anything with a large dependency are never in the initial bundle.
+- Query results are shared through the query cache, not refetched per component.
+- Images and media carry explicit dimensions to prevent layout shift.
+- `memo`, `useMemo`, `useCallback` are added only with a profiler capture showing the re-render they prevent, and the capture is mentioned in the plan.

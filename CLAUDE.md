@@ -24,6 +24,7 @@ Judgement rules only, language-free. Loaded into every session on every machine.
 - Ask before creating a new file: propose the name and location first.
 - Never label breakage you caused as pre-existing. Report pre-existing failures in untouched files by file and line; do not fix them without asking.
 - Tests: do not run them unprompted. When a run fails because of your change, fix the code, never the assertion.
+- Use the package manager the lockfile indicates, its commands only, never mixed. Never run an install to "see if it fixes it."
 - Commit messages are one line: `type(scope): what changed`, imperative, under 100 characters, no period, no body. `fix(ble): retry pairing after timeout`.
 
 ## Code
@@ -34,7 +35,8 @@ Judgement rules only, language-free. Loaded into every session on every machine.
 - Semantic names (`minWithdrawalAmount`, not `min`).
 - No silent failures. Never an empty catch: rethrow, return an explicit error state, or pass to the application error handler. Expected failures are modeled as explicit states, not thrown. Domain errors get specific error types. User-facing errors are actionable and non-technical.
 - Leave existing intentional logging in place; update a message only if a structural change made it wrong. No stray debug output in production code.
-- Avoid pathological patterns (accidental O(n^2), redundant requests, redundant re-renders). Beyond that, optimize only with profiling evidence.
+- Performance is a correctness concern at the design level and a measurement concern after that. At design time: no N+1 or repeated fetches for data already in hand, no unbounded lists or payloads, no work in a hot path that could happen once, nothing blocking the main thread that could be deferred. After that, optimize only with a profile showing the cost, and say what it showed.
+- Avoid pathological patterns (accidental O(n^2), redundant requests, redundant re-renders).
 
 ## Earn it
 
