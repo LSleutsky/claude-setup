@@ -26,3 +26,5 @@ A numbered list, most important first. Each item is exactly two lines:
 ```
 
 Nothing else. No headings, no summary, no praise, no restating the diff, no code. If a pass found nothing, it contributes no items. If there are no items at all, reply "No findings." and stop. Twenty items maximum; if there are more, the top twenty by importance and a final line stating the count.
+
+Items tagged clarity are optional and always come last.

@@ -17,6 +17,7 @@ Judgement rules only, language-free. Loaded into every session on every machine.
 
 ## While working
 
+- When compacting, preserve the full list of modified files, the approved plan, and the current phase.
 - Surface blockers immediately. Mechanical retries (typos, flags, paths) are fine; stop when the approach itself has to change.
 - Propose solutions, not just problems.
 - Do not narrate trivial work. When continuing a previous task, state which assumptions are carried forward.
