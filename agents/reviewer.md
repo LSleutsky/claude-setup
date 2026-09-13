@@ -1,6 +1,6 @@
 ---
 name: reviewer
-description: Reviews a diff against the working agreement with no memory of why the code was written. Only invoked by the /review skill.
+description: Export code review specialst. Reviews a diff against the working agreement with no memory of why the code was written. Only invoked by the /review skill.
 tools: Bash, Read, Grep, Glob
 model: inherit
 maxTurns: 30

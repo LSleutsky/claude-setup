@@ -35,8 +35,7 @@ Judgement rules only, language-free. Loaded into every session on every machine.
 - Semantic names (`minWithdrawalAmount`, not `min`).
 - No silent failures. Never an empty catch: rethrow, return an explicit error state, or pass to the application error handler. Expected failures are modeled as explicit states, not thrown. Domain errors get specific error types. User-facing errors are actionable and non-technical.
 - Leave existing intentional logging in place; update a message only if a structural change made it wrong. No stray debug output in production code.
-- Performance is a correctness concern at the design level and a measurement concern after that. At design time: no N+1 or repeated fetches for data already in hand, no unbounded lists or payloads, no work in a hot path that could happen once, nothing blocking the main thread that could be deferred. After that, optimize only with a profile showing the cost, and say what it showed.
-- Avoid pathological patterns (accidental O(n^2), redundant requests, redundant re-renders).
+- Performance is a correctness concern at the design level and a measurement concern after that. At design time: no N+1, accidental O(n^2), or repeated fetches for data already in hand, no unbounded lists or payloads, no work in a hot path that could happen once, nothing blocking the main thread that could be deferred. After that, optimize only with a profile showing the cost, and say what it showed.
 
 ## Earn it
 
@@ -50,6 +49,26 @@ Each of these is fine when earned and slop when introduced on first use. The pla
 - A new file: earned by the task naming it, or by the plan naming it and being approved.
 - A try/catch: earned by changing what happens next.
 
+## Structure
+
+- Dependencies point one way: UI depends on domain, domain depends on data access, never the reverse. A circular import is a design error, not a lint warning.
+- A data contract is defined once, at the boundary it crosses, and imported everywhere else. Two definitions of the same shape is a bug.
+- One way to do each thing per codebase. If two patterns already exist for the same job, use the dominant one and say so. Never introduce a third.
+- A change should land in one place. If a plan touches the same concept in three files, the concept is missing a home; say where it should live, do not add a fourth copy.
+- Prepare for change by keeping code small and deletable, not by adding indirection. The cheapest thing to change is the thing that does not exist yet.
+- "Future-proof", "scalable", "flexible", and "extensible" are not justifications. A plan that needs one names the second concrete use instead, or drops the pattern.
+
+## Security
+
+- Validate at every trust boundary: request bodies, params, query strings, webhooks, file uploads, anything from another service. Inside the boundary, trust the type.
+- Every endpoint, action, and route states its authorization in the plan. The default is deny; an unguarded path is a question.
+- Secrets live in the environment and are read in one place. Never in code, logs, error messages, client bundles, commit messages, or the worklog.
+- Queries are parameterized. Never string-build SQL, shell commands, or HTML from input.
+- Errors shown to a user say what to do, not what went wrong inside. Stack traces, internal paths, and library messages never leave the server.
+- Personal and sensitive data never appear in logs, notes, worklogs, context files, or test fixtures. Structure and field names are fine; values are not.
+- No new dependency for something the platform or an existing dependency already does. Every dependency is an attack surface; the plan names why it is worth one.
+- No `eval`, no dynamic code from input, no disabling a security header, CORS rule, or CSP to make something work.
+
 ## Writing
 
 Answers first. The first sentence answers the question. No preamble, no restating the question, no options nobody asked for, no summary at the end. If one sentence answers it, one sentence is the whole reply.
@@ -60,13 +79,15 @@ Doc comments follow the language rules in `rules/` and are written the way you w
 
 Bad:
 `// This function is responsible for validating the incoming payload and ensuring that all required fields are present before processing.`
+
 Good:
 `// Reject early so the queue never sees a partial payload.`
 
 Bad:
 `/** Retrieves the current user's active session from the store and returns it, or undefined if no session exists. */`
+
 Good:
-```
+```ts
 /**
  * Active session, or undefined when logged out.
  */
