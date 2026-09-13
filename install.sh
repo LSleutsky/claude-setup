@@ -24,7 +24,7 @@ backup="$target.backup-$(date +%Y%m%d-%H%M%S)"
 cp -r "$target" "$backup"
 
 rm -rf "$target/rules" "$target/hooks" "$target/skills" "$target/agents"
-mkdir -p "$target/rules" "$target/hooks" "$target/skills" "$target/agents" "$target/context" "$target/worklogs"
+mkdir -p "$target/rules" "$target/hooks" "$target/skills" "$target/agents" "$target/context" "$target/worklogs" "$target/docs"
 
 cp "$repo_dir/CLAUDE.md" "$target/CLAUDE.md"
 cp "$repo_dir"/rules/*.md "$target/rules/"
