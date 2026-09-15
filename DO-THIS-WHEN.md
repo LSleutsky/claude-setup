@@ -28,6 +28,7 @@
 | Writing the PR | Short human description, diff stays out of context | `/pr [base] [ticket]` |
 | A bug, no ticket | Fix by sequence, not by guessing | `/debug <symptom, trace, file>` |
 | Quick question mid-task | Answer never enters history | `/btw <question>` |
+| Need a fact from docs or the web | Sourced claims only, pages stay out of your session | `/research <question>` |
 
 ## Across repos
 

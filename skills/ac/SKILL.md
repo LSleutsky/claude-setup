@@ -19,6 +19,7 @@ $ARGUMENTS
 - Anything that affects architecture, data contracts, or user-visible behavior is a question, not a decision.
 - If the AC needs a change in another repo, do not make it. Write a handoff instead: the repo, what must change, the exact contract (route, request, response types), and why. The user takes that to a session in that repo. Code this repo against the contract only after the user confirms it.
 - Code outside this repo is read only through the `explorer` subagent, which returns locations and contracts, never code. Commands with long output (tests, builds) run through the `runner` subagent, which returns only the outcome.
+- Facts about a library, platform, topic, or API that are not in the repo or its `node_modules` go through the `researcher` subagent, which returns sourced claims only. Never from memory.
 
 ## Now
 
