@@ -1,13 +1,14 @@
 ---
 name: explain
-description: Explains code with visual diagrams and analogies. Use when explaining how code works, teaching about a codebase, or when the user asks "how does this work?"
+description: Explains how code in this repo works, with a diagram and a path:line walk-through. Use when the user asks how a part of this codebase works. Not for library, platform, or Claude Code questions.
 ---
 
-When explaining code, always include:
+Answer in the first sentence: what the code does and why it exists.
 
-1. **Start with an analogy**: Compare the code to something from everyday life
-2. **Draw a diagram**: Use ASCII art to show the flow, structure, or relationships
-3. **Walk through the code**: Explain step-by-step what happens
-4. **Highlight a gotcha**: What's a common mistake or misconception?
+Then, only the parts that apply:
 
-Keep explanations conversational. For complex concepts, use multiple analogies.
+1. Diagram: the flow or structure in a `text` fenced block, when three or more parts interact.
+2. Walk-through: execution order, one line per step, each citing `path:line`.
+3. Gotcha: the one thing a reader is most likely to get wrong here.
+
+Read the code before explaining it; never describe a file you have not opened. One analogy only when the concept has no counterpart elsewhere in this codebase. No headings, no bold.

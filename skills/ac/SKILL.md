@@ -2,7 +2,7 @@
 name: ac
 description: Implement acceptance criteria in reviewed phases. Manual only.
 disable-model-invocation: true
-argument-hint: [paste the acceptance criteria]
+argument-hint: "[paste the acceptance criteria]"
 ---
 
 Acceptance criteria for this session:
