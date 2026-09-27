@@ -3,6 +3,7 @@
 | When | Why | Command |
 |---|---|---|
 | New machine | Build `~/.claude` from this repo | `git clone <repo> ~/dev/claude-setup && cd ~/dev/claude-setup && bash install.sh` |
+| New machine | The TypeScript LSP plugin needs its server on PATH, or it silently does nothing | `npm install -g typescript-language-server typescript` |
 | Work machine | Read sibling repos without prompts | `jq '.permissions.additionalDirectories = [...]' ~/.claude/settings.json` |
 | After any edit to this repo | Push the change to `~/.claude` | `bash install.sh` |
 | Something seems ignored | See what loaded and what is registered | `/context` `/hooks` `/permissions` |
