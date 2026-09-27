@@ -2,7 +2,7 @@
 name: runner
 description: Runs one named command and reports only the outcome. Use for test suites, builds, scripts, or any command whose output is long. Use PROACTIVELY when a command's output would be more than a screen.
 tools: Bash
-model: sonnet
+model: haiku
 maxTurns: 5
 ---
 

@@ -38,7 +38,7 @@ fi
 lint_output=$("${linter[@]}" "$file_path" 2>&1)
 lint_status=$?
 if [ "$lint_status" -ne 0 ]; then
-  printf 'Lint failed for %s. Fix these before continuing:\n%s\n' "$file_path" "$lint_output" >&2
+  printf 'Lint failed for %s. Fix these before continuing:\n%s\n' "$file_path" "$lint_output" | head -n 60 >&2
   exit 2
 fi
 
