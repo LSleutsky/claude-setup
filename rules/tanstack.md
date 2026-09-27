@@ -5,7 +5,6 @@ paths:
   - "**/router.{ts,tsx}"
   - "**/routeTree.gen.ts"
   - "**/*.server.{ts,tsx}"
-  - "**/app.config.{ts,js}"
 ---
 
 # TanStack Router, Start, Query

@@ -6,7 +6,8 @@ paths:
 # TypeScript
 
 - Types are the source of truth for data contracts.
-- Never widen a type to bypass an error. Fix the data flow instead of reaching for `any`, `unknown`, or a type assertion.
+- Never widen a type to bypass an error. Fix the data flow instead of reaching for `any`, a type assertion, a non-null `!`, `@ts-ignore`, or `@ts-expect-error`.
+- Data from outside the process (responses, params, storage, `JSON.parse`) is `unknown` until the repo's validator parses it. Infer the type from that schema; never declare the same shape twice.
 - Declare `interface` and `type` directly after the imports, before any other logic.
 - To verify a library API exists, grep the package's `.d.ts` under `node_modules`. Not confirmed there means not used.
 - Treat existing `console.info` and `console.error` as intentional. `console.log` is for development tracing only and does not ship.
