@@ -1,12 +1,3 @@
----
-paths:
-  - "**/app/**/{page,layout,template,loading,error,not-found,route,default}.{ts,tsx,js,jsx}"
-  - "**/app/**/actions.{ts,tsx}"
-  - "**/middleware.{ts,js}"
-  - "**/next.config.{js,mjs,ts}"
-  - "**/instrumentation.{ts,js}"
----
-
 # Next.js (App Router)
 
 - Server Components by default. `"use client"` goes on the smallest leaf that needs state, effects, or browser APIs, never on a layout or page. A client boundary that receives server data as props is the pattern; a client boundary that fetches is a bug.

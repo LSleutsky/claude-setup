@@ -20,7 +20,8 @@
       "Bash(git status *)",
       "Bash(git diff *)",
       "Bash(git log *)",
-      "Bash(git branch --show-current)"
+      "Bash(git branch --show-current)",
+      "Bash(~/.claude/hooks/stack-rules.sh)"
     ],
     "ask": [
       "Bash(git commit *)",

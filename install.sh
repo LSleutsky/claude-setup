@@ -2,7 +2,7 @@
 # Builds ~/.claude from this repo. Run after cloning, and again after any change here.
 #
 # Owned by this repo, replaced every run:
-#   1. ~/.claude/CLAUDE.md  rules/  hooks/
+#   1. ~/.claude/CLAUDE.md  rules/  stacks/  hooks/
 #   2. ~/.claude/skills/<name> and ~/.claude/agents/<name>.md for every name in this repo
 #   3. The "permissions.allow", "permissions.ask", "permissions.deny" and "hooks" keys of ~/.claude/settings.json
 #
@@ -21,11 +21,11 @@ manifest="$target/.claude-setup-manifest"
 command -v jq >/dev/null 2>&1 || { echo "jq is required. Install it and rerun." >&2; exit 1; }
 [ -f "$repo_dir/CLAUDE.md" ] || { echo "run this from the setup repo" >&2; exit 1; }
 
-mkdir -p "$target/rules" "$target/hooks" "$target/skills" "$target/agents" "$target/context" "$target/worklogs" "$target/docs" "$backups"
+mkdir -p "$target/rules" "$target/stacks" "$target/hooks" "$target/skills" "$target/agents" "$target/context" "$target/worklogs" "$target/docs" "$backups"
 
 backup="$backups/$(date +%Y%m%d-%H%M%S)"
 mkdir -p "$backup"
-for owned in CLAUDE.md settings.json rules hooks skills agents; do
+for owned in CLAUDE.md settings.json rules stacks hooks skills agents; do
   [ ! -e "$target/$owned" ] || cp -R "$target/$owned" "$backup/"
 done
 find "$backups" -mindepth 1 -maxdepth 1 -type d | sort -r | tail -n +6 | while IFS= read -r old_backup; do
@@ -42,10 +42,11 @@ if [ -f "$manifest" ]; then
   done <"$manifest"
 fi
 
-rm -rf "$target/rules" "$target/hooks"
-mkdir -p "$target/rules" "$target/hooks"
+rm -rf "$target/rules" "$target/stacks" "$target/hooks"
+mkdir -p "$target/rules" "$target/stacks" "$target/hooks"
 cp "$repo_dir/CLAUDE.md" "$target/CLAUDE.md"
 cp "$repo_dir"/rules/*.md "$target/rules/"
+cp "$repo_dir"/stacks/*.md "$target/stacks/"
 cp "$repo_dir"/hooks/*.sh "$target/hooks/"
 chmod +x "$target"/hooks/*.sh
 
