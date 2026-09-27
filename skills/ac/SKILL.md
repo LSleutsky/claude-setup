@@ -17,7 +17,32 @@ $ARGUMENTS
 - Before every commit message, run `git diff --stat` and list each touched file. Any file not named in the approved plan is called out with the reason it was needed.
 - Do not begin the next phase until told to.
 - Anything that affects architecture, data contracts, or user-visible behavior is a question, not a decision.
-- If the AC needs a change in another repo, do not make it. Write a handoff instead: the repo, what must change, the exact contract (route, request, response types), and why. The user takes that to a session in that repo. Code this repo against the contract only after the user confirms it.
+- If the AC needs a change in another repo, do not make it. Write a handoff instead, which the user pastes into `/ac` in a session in that repo. That session has none of this context, so the handoff must stand alone. Before writing it, read the target through `explorer` until every field below is filled from code or from the user. If one cannot be, it is a question for the user now, never a guess in the handoff. Reply with the handoff as one fenced block tagged `markdown` and opened with four backticks, so the inner `ts` block survives the paste, in exactly this shape:
+
+  ```markdown
+  # Handoff: <one-line change>
+  Target repo: <name> at `<absolute path>`
+  Requested by: <this repo>, for <ticket id and one-line AC summary>
+
+  ## Why
+  <what this repo needs and cannot do without it, two sentences max>
+
+  ## Contract
+  <method and route, or function or event name>
+  <request, response and error types, verbatim as this repo will code against them, in a `ts` block>
+  <auth, status codes, pagination, nullability, whatever the caller depends on>
+
+  ## Current state in the target
+  - `<path:line>`: <what exists now that this touches or extends>
+
+  ## Done when
+  - <checkable criterion, one per line>
+
+  ## Out of scope
+  - <what the target must not change, including anything else consuming this contract>
+  ```
+
+  Code this repo against the contract only after the user confirms it landed.
 - Code outside this repo is read only through the `explorer` subagent, which returns locations and contracts, never code. Commands with long output (tests, builds) run through the `runner` subagent, which returns only the outcome.
 - Facts about a library, platform, topic, or API that are not in the repo or its `node_modules` go through the `researcher` subagent, which returns sourced claims only. Never from memory.
 
