@@ -50,7 +50,11 @@ for family in $families; do
 done
 
 if [ "$failed" -ne 0 ]; then
-  printf 'Typecheck failed. Fix every error you introduced before finishing:\n%s' "$all_output" >&2
+  error_count=$(printf '%s' "$all_output" | grep -c 'error')
+  {
+    printf 'Typecheck failed (%s error lines, first 60 below). Fix every error you introduced before finishing:\n' "$error_count"
+    printf '%s' "$all_output" | head -n 60
+  } >&2
   exit 2
 fi
 
