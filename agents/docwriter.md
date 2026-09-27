@@ -23,6 +23,7 @@ Read the scope. Write the document to this skeleton, omitting any section with n
 ---
 repo: <repo>
 updated: <date>
+last_commit: <output of git rev-parse HEAD>
 ---
 
 # 1. Infrastructure
