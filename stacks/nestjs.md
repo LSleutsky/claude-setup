@@ -1,9 +1,3 @@
----
-paths:
-  - "**/*.{controller,service,module,guard,interceptor,pipe,filter,middleware,dto,entity,resolver,gateway,strategy}.ts"
-  - "**/main.ts"
----
-
 # NestJS
 
 - Controllers are thin: receive, validate, delegate, return. No business logic, no data access, no conditionals beyond routing the call.

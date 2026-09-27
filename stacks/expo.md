@@ -1,15 +1,3 @@
----
-paths:
-  - "**/app.config.{ts,js}"
-  - "**/app.json"
-  - "**/eas.json"
-  - "**/app/**/_layout.{ts,tsx}"
-  - "**/app/**/+*.{ts,tsx}"
-  - "**/*.{ios,android,native}.{ts,tsx}"
-  - "**/metro.config.{js,ts}"
-  - "**/plugins/**/*.{ts,js}"
----
-
 # Expo and React Native
 
 - Long lists use `FlashList`, never `FlatList` or `ScrollView` with mapped children. `estimatedItemSize` is set from a measurement, not guessed.

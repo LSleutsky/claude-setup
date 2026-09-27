@@ -3,6 +3,7 @@
 # Per-repo files are keyed by hooks/repo-key.sh (origin repo name, else folder name):
 #   ~/.claude/context/<key>.md   state, written by /map and /note (injected whole)
 #   ~/.claude/worklogs/<key>.md  narrative, written by /log (last 3 entries, max 80 lines)
+# Plus the framework rules stack-rules.sh picks from package.json.
 set -u
 
 [ -n "${CLAUDE_PROJECT_DIR:-}" ] || exit 0
@@ -14,6 +15,8 @@ if [ -f "$context" ]; then
   cat "$context"
   printf '\n'
 fi
+
+"$HOME/.claude/hooks/stack-rules.sh"
 
 log="$HOME/.claude/worklogs/${repo_key}.md"
 if [ -f "$log" ]; then

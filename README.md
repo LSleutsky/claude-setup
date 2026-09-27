@@ -2,7 +2,7 @@
 
 ## What the installer does
 
-Replaces `~/.claude/CLAUDE.md`, `rules/`, `hooks/`, every skill and agent that exists in this repo, and the `permissions.allow`, `permissions.ask`, `permissions.deny`, and `hooks` keys of `~/.claude/settings.json`. Everything else in `~/.claude/` is untouched: `context/`, `worklogs/`, `docs/`, synced and hand-made skills and agents, `projects/`, credentials, and every other settings key, including `permissions.additionalDirectories`. Backs up the owned paths to `~/.claude-setup-backups/` and keeps the last 5. Safe on a fresh machine and on one with an existing setup. Edit this repo, rerun; never hand-edit the owned paths.
+Replaces `~/.claude/CLAUDE.md`, `rules/`, `stacks/`, `hooks/`, every skill and agent that exists in this repo, and the `permissions.allow`, `permissions.ask`, `permissions.deny`, and `hooks` keys of `~/.claude/settings.json`. Everything else in `~/.claude/` is untouched: `context/`, `worklogs/`, `docs/`, synced and hand-made skills and agents, `projects/`, credentials, and every other settings key, including `permissions.additionalDirectories`. Backs up the owned paths to `~/.claude-setup-backups/` and keeps the last 5. Safe on a fresh machine and on one with an existing setup. Edit this repo, rerun; never hand-edit the owned paths.
 
 ## Install on any machine
 
