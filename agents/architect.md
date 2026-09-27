@@ -2,7 +2,7 @@
 name: architect
 description: Read-only architecture audit of a module or repo. Only invoked by the /audit skill.
 tools: Read, Grep, Glob, Bash
-model: inherit
+model: opus
 maxTurns: 60
 ---
 
