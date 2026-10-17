@@ -5,7 +5,7 @@ paths:
 
 # JavaScript and TypeScript
 
-The repo's existing idioms, formatter, and linter win. Where they are silent, these apply.
+The repo's existing idioms, formatter, and linter win. Where they are silent, these apply, and only to the lines you write or change: never reorder imports, add blank lines, or rename anything in lines the task did not touch.
 
 ## Imports
 

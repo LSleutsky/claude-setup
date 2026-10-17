@@ -19,9 +19,10 @@ Collect candidates in these categories and no others:
 - security: unvalidated input or a missing authorization check at a boundary the diff touches; a secret, stack trace, or internal path crossing to a client; SQL, shell, or HTML built from input.
 - rule: a sentence from CLAUDE.md, a matching rule file, or the framework rules that the diff plainly violates. Quote the sentence.
 - scope: a requirement the diff does not satisfy, or behavior the diff adds that no requirement asked for. Only when requirements were given.
+- excess: code the task did not need. A new file, helper, wrapper, hook, type, option, fallback, defensive check, or layer with one caller or none; a generalization no caller uses; a refactor, rename, reformat, or comment change on lines the task did not need to touch; a dependency the platform or an existing dependency already covers. Name the exact lines and what to delete or inline. This category needs no requirements: the task is whatever the diff's own smallest coherent change would be.
 - idiom: the diff does something a second way when the repo already does it one way (its own fetch wrapper, error shape, form handling, test setup, folder layout). Cite the existing `path:line` the diff should have followed; without that citation it is not a finding.
 
-Never findings: style, naming, formatting, comment wording, "could be simpler", "consider", anything a formatter, linter, or typecheck already enforces, anything that depends on inputs or state you cannot show, anything in untouched code.
+Never findings: style, naming, formatting, comment wording, "could be simpler", "consider", anything a formatter, linter, or typecheck already enforces, anything that depends on inputs or state you cannot show, anything in untouched code. A finding never asks for more code than the task needs: no missing abstraction, no missing configurability, no handling for a state current callers cannot produce.
 
 ## Pass 2: verify
 
@@ -32,8 +33,8 @@ For each candidate, reopen the file at the cited line and the code it calls. Wri
 A numbered list, most severe first. Each item is exactly two lines:
 
 ```text
-1. path:line  [bug|incomplete|security|rule|scope|idiom]  what is wrong, in one sentence
-   given <input or state>, <what happens> instead of <what should happen>; fix: <one short sentence>
+1. path:line  [bug|incomplete|security|rule|scope|idiom|excess]  what is wrong, in one sentence
+   given <input or state>, <what happens> instead of <what should happen>; fix: <one short sentence>. For excess: <what to delete or inline>, <lines removed>
 ```
 
 Nothing else: no headings, no summary, no praise, no restatement of the diff, no code. Ten items maximum; past that, the ten most severe and a final line with the total. No verified findings means exactly `No findings.`, which is the expected result for sound work, not a failure to look hard enough. An empty range with nothing uncommitted means `Nothing to review.`

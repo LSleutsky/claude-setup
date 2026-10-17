@@ -4,7 +4,7 @@
 - Data is fetched where it is rendered, in Server Components or route handlers. No client-side fetching of data that was available at render time.
 - Mutations are Server Actions or route handlers. Every one validates its input on the server with the validator the repo already uses. The client is never trusted.
 - Caching is explicit. Every `fetch` and every data function states its cache or `revalidate` behavior, and the plan says whether the route is static or dynamic and why. Tag-based revalidation over time-based when a mutation is known.
-- `loading.tsx` and `error.tsx` exist for every route segment that fetches. Suspense boundaries are placed deliberately, around the slow part, not the whole page.
+- A route segment you add that fetches gets `loading.tsx` and `error.tsx`. Suspense boundaries are placed deliberately, around the slow part, not the whole page.
 - `next/image`, `next/link`, `next/font`. Never raw `<img>`, never `<a>` for internal navigation.
 - Metadata through the `metadata` export or `generateMetadata`, never manual `<head>` tags.
 - Secrets are read only in server code. `NEXT_PUBLIC_` is for values that are safe in the bundle, nothing else.

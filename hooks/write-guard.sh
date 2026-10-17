@@ -1,18 +1,24 @@
 #!/usr/bin/env bash
-# PreToolUse hook (Edit|Write|NotebookEdit). Two checks, both exit 2 to block and show stderr to Claude:
+# PreToolUse hook (Edit|Write|NotebookEdit). Three outcomes:
 #
-#   1. Sensitive files are never written: env files, lockfiles, migrations, anything under .git/,
-#      and Claude Code settings files. The user edits them.
-#   2. Writes land only in the working directories: the current repo, the temp dir, the machine-local
-#      folders under ~/.claude (context, worklogs, docs, plans, projects), every path in
-#      permissions.additionalDirectories (user, project and local settings), and every directory
-#      added with /add-dir this session (recorded by add-dir.sh). The installed setup under ~/.claude
-#      changes only through the setup repo and install.sh.
+#   1. Blocked (exit 2, stderr to Claude): env files, lockfiles, anything under .git/, and Claude Code settings files.
+#      These change only by the user's hand or their own tool.
+#   2. Asked (JSON permissionDecision "ask", reason shown in the prompt): a migration, a file under the installed setup
+#      in ~/.claude, or a path outside the working directories. The user approves once in the prompt; /add-dir <path>
+#      stops the prompts for a directory for the rest of the session, permissions.additionalDirectories for good.
+#   3. Allowed: the current repo, the temp dir, the machine-local folders under ~/.claude (context, worklogs, docs,
+#      plans, projects), every path in permissions.additionalDirectories (user, project and local settings), and every
+#      directory added with /add-dir this session (recorded by add-dir.sh).
 set -u
 
 block() {
   printf 'Blocked: %s\n' "$1" >&2
   exit 2
+}
+
+ask() {
+  jq -cn --arg reason "$1" '{hookSpecificOutput: {hookEventName: "PreToolUse", permissionDecision: "ask", permissionDecisionReason: $reason}}'
+  exit 0
 }
 
 # Resolve a leading `~`, `.` and `..` as text, since the file may not exist yet.
@@ -54,23 +60,21 @@ project_dir=$(normalize "$project_dir")
 
 # 1. Sensitive files, checked on the basename and on any path segment. Example env files hold no secrets.
 base_name=$(basename "$file_path")
-sensitive=""
 case "$base_name" in
   .env.example | .env.sample | .env.template) ;;
-  .env | .env.*) sensitive="an environment file" ;;
-  package-lock.json | pnpm-lock.yaml | yarn.lock | bun.lock | bun.lockb | Cargo.lock | go.sum | uv.lock | poetry.lock) sensitive="a lockfile" ;;
+  .env | .env.*) block "$file_path is an environment file. Say what must change and why, then stop; the user edits it." ;;
+  package-lock.json | pnpm-lock.yaml | yarn.lock | bun.lock | bun.lockb | Cargo.lock | go.sum | uv.lock | poetry.lock) block "$file_path is a lockfile. It changes only through the package manager; say what must change and stop." ;;
 esac
 case "$file_path" in
-  */migrations/* | */migration/*) sensitive="a migration" ;;
-  */.git/*) sensitive="inside .git" ;;
-  */.claude/settings.json | */.claude/settings.local.json) sensitive="a Claude Code settings file" ;;
+  */.git/*) block "$file_path is inside .git. Say what must change and stop." ;;
+  */.claude/settings.json | */.claude/settings.local.json) block "$file_path is a Claude Code settings file. Say what must change and why, then stop; the user edits it." ;;
+  */migrations/* | */migration/*) ask "$file_path is a migration. Approve only if you asked for this migration." ;;
 esac
-[ -z "$sensitive" ] || block "$file_path is $sensitive. Say what must change and why, then stop; the user edits it."
 
 # 2. Location.
 case "$file_path" in
   "$HOME/.claude"/context/* | "$HOME/.claude"/worklogs/* | "$HOME/.claude"/docs/* | "$HOME/.claude"/plans/* | "$HOME/.claude"/projects/*) exit 0 ;;
-  "$HOME/.claude"/*) block "$file_path is part of the installed setup. It changes in the setup repo, then bash install.sh; the user does that." ;;
+  "$HOME/.claude"/*) ask "$file_path is part of the installed setup; the next bash install.sh overwrites it. Approve for a one-off, or change it in the setup repo." ;;
 esac
 tmp_dir=$(normalize "${TMPDIR:-/tmp}")
 allowed_dirs=("$project_dir" "$tmp_dir" "/private$tmp_dir" /tmp /private/tmp)
@@ -108,4 +112,4 @@ for allowed in "${allowed_dirs[@]}"; do
   esac
 done
 
-block "$file_path is outside the working directories; other repos are read-only. The user unlocks a directory with /add-dir <path>, or permanently in permissions.additionalDirectories. Say what must change and stop."
+ask "$file_path is outside the working directories. Approve this write, or run /add-dir $(dirname "$file_path") to allow the directory for this session."

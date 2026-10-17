@@ -3,6 +3,7 @@ name: design-doc
 description: Create or update this repo's technical design document from the code. The doc lives under ~/.claude/docs, never in the repo, and is never read into sessions. Manual only.
 disable-model-invocation: true
 argument-hint: "[only for facts not in the branch, commits, or worklog]"
+allowed-tools: Bash(echo *) Bash(test *) Bash(jq *) Bash(grep *) Bash(git *) Bash(f=*) Bash(if *) Bash(~/.claude/hooks/repo-key.sh) Bash(~/.claude/hooks/base-ref.sh)
 ---
 
 ## Context

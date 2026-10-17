@@ -118,6 +118,17 @@
         ]
       }
     ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/turn-start.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
     "PreToolUse": [
       {
         "matcher": "Edit|Write|NotebookEdit",
@@ -157,7 +168,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/typecheck-on-stop.sh",
+            "command": "~/.claude/hooks/stop-check.sh",
             "timeout": 180
           }
         ]

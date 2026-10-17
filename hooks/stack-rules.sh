@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Prints the framework rules under ~/.claude/stacks that this repo's package.json dependencies call for.
 # Path-scoped rules cannot tell a React Native screen from a web component; the dependency list can.
-# Used by session-context.sh at session start.
+# Registered as its own SessionStart hook so its output has its own character budget.
 
 set -u
 
@@ -31,7 +31,7 @@ has @nestjs/core && selected+=(nestjs)
 has @tanstack/react-query && selected+=(tanstack-query)
 [ "${#selected[@]}" -gt 0 ] || exit 0
 
-printf 'Framework rules for this repo, chosen from its package.json dependencies. They apply to every file, like a rule file:\n\n'
+printf 'Framework rules for this repo, chosen from its package.json dependencies. Like a rule file, they constrain the code you write and are never a reason to change untouched code:\n\n'
 for stack in "${selected[@]}"; do
   [ -f "$stacks/$stack.md" ] || continue
   cat "$stacks/$stack.md"

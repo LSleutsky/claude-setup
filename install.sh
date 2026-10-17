@@ -4,12 +4,12 @@
 # Owned by this repo, replaced every run:
 #   1. ~/.claude/CLAUDE.md  rules/  stacks/  hooks/
 #   2. ~/.claude/skills/<name> and ~/.claude/agents/<name>.md for every name in this repo
-#   3. The "permissions.allow", "permissions.ask", "permissions.deny" and "hooks" keys of ~/.claude/settings.json
+#   3. The "permissions.allow", "permissions.ask", "permissions.deny" and "hooks" keys of ~/.claude/settings.json, plus the plugins this repo enables under "enabledPlugins"
 #
 # Machine-local, never touched:
 #   1. ~/.claude/context/, worklogs/ and docs/ (written by /map, /note, /log, /design-doc)
 #   2. ~/.claude/skills/synced and any other skill or agent not from this repo
-#   3. ~/.claude/projects/ (transcripts, auto memory), credentials, everything else every other key in settings.json, including permissions.additionalDirectories
+#   3. ~/.claude/projects/ (transcripts, auto memory), credentials, and every other key in settings.json, including permissions.additionalDirectories
 
 set -eu
 
@@ -92,4 +92,4 @@ jq -s '.[0] * .[1]' <(echo "$existing") "$repo_dir/settings.json" >"$target/sett
 mv "$target/settings.json.tmp" "$target/settings.json"
 
 echo "installed into $target (backup: $backup)"
-echo "verify in a repo: /context  /hooks  /permissions  /agents"
+echo "verify in a repo: /context  /hooks  /permissions"

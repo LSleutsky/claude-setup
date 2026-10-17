@@ -14,10 +14,10 @@ The repo's existing way of doing each of these wins; these apply where it has no
 - An effect only syncs with something outside React (subscriptions, DOM, timers, non-React libraries) and returns its cleanup. Never an effect to compute a value, mirror a prop, or react to a prop change: derive during render, or change the `key` to reset state.
 - Logic an effect calls without retriggering it goes in `useEffectEvent`, declared in the same component, called only from the effect, never listed as a dependency.
 - Data comes from the repo's query library or route loader. Never fetch in an effect. External stores connect through `useSyncExternalStore`. App-once setup lives at module level, not in `useEffect` with an empty dependency array.
-- Every async UI path defines loading, empty, error, and success. Loading is a Suspense fallback or `isPending`; errors reach an error boundary placed at a logical grouping (a list, a panel), not around every element.
+- An async UI path you add defines loading, empty, error, and success. Loading is a Suspense fallback or `isPending`; errors reach an error boundary placed at a logical grouping (a list, a panel), not around every element.
 - `use(promise)` reads a promise created before render (loader, server, event, cache); never create it during render. `lazy()` is declared at module level and rendered inside Suspense.
 - `ref` is a regular prop; no new `forwardRef`. `<Context value>`, not `<Context.Provider>`. Ref callbacks return their cleanup.
-- Web forms: `<form action={fn}>` with `useActionState` for state and pending; `useFormStatus` from a child rendered inside the form; `useOptimistic` set only inside the action. Expected errors return as state; unexpected ones throw. Every form has validation, submission states, and labels.
+- Web forms: `<form action={fn}>` with `useActionState` for state and pending; `useFormStatus` from a child rendered inside the form; `useOptimistic` set only inside the action. Expected errors return as state; unexpected ones throw. A form you add has validation, submission states, and labels.
 - Reserve layout space with CSS, never with placeholder characters. Images and media carry explicit dimensions.
 
 ## State
@@ -30,10 +30,10 @@ The repo's existing way of doing each of these wins; these apply where it has no
 ## Performance
 
 - Keys are stable ids from the data, unique among siblings, never the index, never generated during render.
-- Routes and heavy components (charts, editors, anything with a large dependency) load lazily, never in the initial bundle.
+- A route or heavy component you add (charts, editors, anything with a large dependency) loads lazily; existing imports stay as they are.
 - `memo`, `useMemo`, `useCallback` only when a measurement (Profiler or `console.time` on a production build) shows the cost, or when the value is a dependency that must stay stable. With React Compiler enabled, never add them; leave existing ones alone.
 - `useTransition` or `useDeferredValue` keep the current UI visible during slow updates; a deferred child must be memoized or the deferral does nothing.
-- Long lists are virtualized; the threshold is a measurement, not a guess.
+- A list is virtualized only when a measurement shows it needs to be, never because it might grow.
 
 ## Structure
 
