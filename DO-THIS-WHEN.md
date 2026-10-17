@@ -4,9 +4,10 @@
 |---|---|---|
 | New machine | Build `~/.claude` from this repo | `git clone <repo> ~/dev/claude-setup && cd ~/dev/claude-setup && bash install.sh` |
 | New machine | The TypeScript LSP plugin needs its server on PATH, or it silently does nothing | `npm install -g typescript-language-server typescript` |
-| Work machine | Read sibling repos without prompts | `jq '.permissions.additionalDirectories = [...]' ~/.claude/settings.json` |
+| Work machine | Read and write sibling repos and the handoff folder without prompts | `jq '.permissions.additionalDirectories = [...]' ~/.claude/settings.json` |
 | After any edit to this repo | Push the change to `~/.claude` | `bash install.sh` |
 | Something seems ignored | See what loaded and what is registered | `/context` `/hooks` `/permissions` |
+| Rules feel contradictory | Audit every instruction file | `/doctor prompt-audit` |
 
 ## Repo
 
@@ -22,22 +23,31 @@
 
 | When | Why | Command |
 |---|---|---|
-| Starting a ticket | Plan, phases, one commit message each | `/ac <paste criteria>` |
+| Starting a ticket | Plan, phases, one commit message each, tagged with the ticket | `/ac ABC-123 ticket: <paste criteria>` |
 | Reviewing the plan | Edit it directly instead of describing changes | `Ctrl+G` |
 | After a UI phase | Prove it works at runtime, not just in types | `/verify` |
-| Before a PR, or after a big phase | Cold review, approve fixes by number | `/review` |
-| Writing the PR | Short human description, diff stays out of context | `/pr [base] [ticket]` |
+| Before a PR, or after a big phase | Cold defect review of everything since the default branch, approve fixes by number | `/review` |
+| Writing the PR | Short human description, diff stays out of context | `/pr` |
 | A bug, no ticket | Fix by sequence, not by guessing | `/debug <symptom, trace, file>` |
 | Quick question mid-task | Answer never enters history | `/btw <question>` |
 | Need a fact from docs or the web | Sourced claims only, pages stay out of your session | `/research <question>` |
+
+## Stopping and resuming
+
+| When | Why | Command |
+|---|---|---|
+| Day ends mid-plan | Write everything the next session needs | `/continue <path in Obsidian>` |
+| Next session | Pick up at the exact next action, no questions | `/ac <paste the Continue document>` |
+| Claude must write to another repo or the handoff folder this session | Unlock the directory for the session | `/add-dir <path>` |
+| Same conversation, later today | Resume the transcript itself | `claude --continue` or `/resume` |
 
 ## Across repos
 
 | When | Why | Command |
 |---|---|---|
 | Need facts from another repo | `explorer` reads it; code stays out of your session | ask, naming the repo |
-| Ticket needs a change elsewhere | `/ac` writes a handoff; that repo gets its own session | branch there, `/ac <paste handoff>` |
-| Two tickets at once | Same context, separate worklog entries | `git worktree add ../<repo>-<branch> -b <branch>` |
+| Ticket needs a change elsewhere | One standalone handoff per repo, contract verified in that repo | `/handoff`, then in each repo `/ac <paste>` |
+| Two tickets at once | Same context, separate worklog entries | `git worktree add ../<repo>-<branch> -b <branch>` or `claude --worktree` |
 
 ## Decisions
 
@@ -52,5 +62,6 @@
 | When | Why | Command |
 |---|---|---|
 | Same correction twice in a session | Context is polluted with failed attempts | `/clear`, then `/ac` again plus one line on what not to do |
-| Wrong everywhere, not just this repo | The rule belongs to you, not the repo | one sentence in `CLAUDE.md`, `bash install.sh` |
-| Monthly | Keep every file earned | delete unflagged rules, stale notes, unused skills |
+| Wrong everywhere, not just this repo | The rule belongs to you, not the repo | one sentence in `CLAUDE.md` or the matching `rules/` file, `bash install.sh` |
+| A new JS or TS house convention | Lives with the language rules | a bullet under `## Conventions` in `rules/javascript.md`, `bash install.sh` |
+| Monthly | Keep every file earned | delete unflagged rules, stale notes, unused skills (`/skill-doctor`) |

@@ -1,54 +1,39 @@
 ---
 name: ac
-description: Implement acceptance criteria in reviewed phases. Manual only.
+description: Implement acceptance criteria in reviewed phases, or resume from a Continue or Handoff document. Manual only.
 disable-model-invocation: true
-argument-hint: "[paste the acceptance criteria]"
+argument-hint: "[ABC-123 ticket:] <acceptance criteria, or a pasted Continue or Handoff document>"
 ---
 
-Acceptance criteria for this session:
+Input for this session:
 
 $ARGUMENTS
 
+Branch: !`git branch --show-current`
+
+## Ticket
+
+The ticket id is the first `ABC-123` style token in the input, else the first one in the branch name, else none. With a ticket id, every commit message this session ends with it in parentheses.
+
+## Which kind of input
+
+- Starts with `# Continue:`: a paused session. Follow its `## Start here` section exactly: switch to the branch, confirm HEAD (if it moved, read `git log <sha>..HEAD --oneline` and carry on), read only the files the next action names, then do the next action under the standing rules below. Do not re-plan, do not re-read the repo, do not ask anything the document answers; its defaults are decisions.
+- Starts with `# Handoff:`: a change another repo needs from this one. Its `## Contract` is the spec and `## Done when` is the acceptance criteria; plan against them under "Fresh criteria".
+- Anything else: fresh acceptance criteria. Go to "Fresh criteria".
+
 ## Standing rules for the rest of this session
 
-- Scope is the AC above. Touch nothing outside it unless the AC cannot work otherwise, and say so when that happens.
-- Smallest diff that satisfies the AC and is verified. Anything on the Earn-it list appears in the plan with its justification or not at all.
-- Never stage or commit. After each phase, and after any further change to an already reviewed phase, reply with one one-line commit message covering exactly those changes, then stop and wait for review.
-- Before every commit message, run `git diff --stat` and list each touched file. Any file not named in the approved plan is called out with the reason it was needed.
+- Scope is the input above. Touch nothing outside it unless the criteria cannot work otherwise, and say so when that happens.
+- Smallest diff that satisfies the criteria and is verified. Anything shared and new (helper, wrapper, interface, option, hook, store, file) appears in the plan with the real uses that earn it (a third call site for a helper, a second for everything else), or not at all.
+- Never stage or commit. After each phase, and after any further change to a reviewed phase: run `git diff --stat`, list each touched file and call out any not in the approved plan with the reason, confirm the hooks came back clean, run the existing tests for the touched code through `runner`, state what ran and the result, reply with one one-line commit message covering exactly those changes, then stop and wait.
 - Do not begin the next phase until told to.
 - Anything that affects architecture, data contracts, or user-visible behavior is a question, not a decision.
-- If the AC needs a change in another repo, do not make it. Write a handoff instead, which the user pastes into `/ac` in a session in that repo. That session has none of this context, so the handoff must stand alone. Before writing it, read the target through `explorer` until every field below is filled from code or from the user. If one cannot be, it is a question for the user now, never a guess in the handoff. Reply with the handoff as one fenced block tagged `markdown` and opened with four backticks, so the inner `ts` block survives the paste, in exactly this shape:
+- A change another repo must make is never made here. Run `/handoff` for it, and code against the contract only after the user confirms it landed.
+- Code outside this repo is read only through `explorer`. Commands with long output run through `runner`. Facts about a library, platform, or API that are not in the repo or `node_modules` come from `researcher`, never from memory.
 
-  ```markdown
-  # Handoff: <one-line change>
-  Target repo: <name> at `<absolute path>`
-  Requested by: <this repo>, for <ticket id and one-line AC summary>
+## Fresh criteria
 
-  ## Why
-  <what this repo needs and cannot do without it, two sentences max>
-
-  ## Contract
-  <method and route, or function or event name>
-  <request, response and error types, verbatim as this repo will code against them, in a `ts` block>
-  <auth, status codes, pagination, nullability, whatever the caller depends on>
-
-  ## Current state in the target
-  - `<path:line>`: <what exists now that this touches or extends>
-
-  ## Done when
-  - <checkable criterion, one per line>
-
-  ## Out of scope
-  - <what the target must not change, including anything else consuming this contract>
-  ```
-
-  Code this repo against the contract only after the user confirms it landed.
-- Code outside this repo is read only through the `explorer` subagent, which returns locations and contracts, never code. Commands with long output (tests, builds) run through the `runner` subagent, which returns only the outcome.
-- Facts about a library, platform, topic, or API that are not in the repo or its `node_modules` go through the `researcher` subagent, which returns sourced claims only. Never from memory.
-
-## Now
-
-1. Read only what the AC touches: the relevant files in this repo, then the backend endpoint they call (the injected context names the client and any sibling repos), then anything behind that endpoint only if its response shape is unclear. Anything outside this repo goes through `explorer`.
-2. List the `TODO` markers the AC covers, with file and line. Leave every other `TODO` alone.
-3. Put every open question into one message. If there are none, say so.
-4. Give a phased plan. Each phase is a vertical slice that leaves the build green on its own. Per phase: the files touched, what changes in each, the justification for anything on the Earn-it list, and an estimate of lines added and removed. A phase over about 150 lines is split or justified. For any phase that introduces a new data flow, name the source of truth, the boundary it crosses, and what the user sees when it fails. No code yet. Stop and wait for approval.
+1. Read only what the criteria touch: the relevant files here, the nearest existing example of each kind of thing the criteria need (a similar screen, component, hook, endpoint, query, form, test) so the new code matches it, then the backend endpoint they call (the injected context names the client and any sibling repos), then anything behind that endpoint only if its response shape is unclear.
+2. List the `TODO` markers the criteria cover, with file and line. Leave every other `TODO` alone.
+3. Put every open question into one message, with the default you would take for each. If there are none, say so.
+4. Give a phased plan. Each phase is a vertical slice that leaves the build green on its own. Per phase: the files touched and what changes in each, the justification for anything shared and new, an estimate of lines added and removed, and the check that proves the phase (typecheck, a named test, a screen to open). A phase over about 150 lines is split or justified. For any phase that introduces a new data flow, name the source of truth, the boundary it crosses, and what the user sees when it fails. End with one `Not doing:` line. No code yet. No open question survives into the plan. Stop and wait for approval.

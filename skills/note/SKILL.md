@@ -3,6 +3,7 @@ name: note
 description: Save one durable fact about this repo to its context file. Manual only.
 disable-model-invocation: true
 argument-hint: "<the fact>"
+effort: low
 allowed-tools: Read Edit Write Bash(~/.claude/hooks/repo-key.sh) Bash(echo *)
 ---
 

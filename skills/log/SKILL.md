@@ -3,6 +3,7 @@ name: log
 description: Append a dated entry for this session's work to the repo's worklog kept outside the repo. Manual only.
 disable-model-invocation: true
 argument-hint: "[optional one-line focus]"
+effort: medium
 allowed-tools: Read Edit Write Bash(~/.claude/hooks/repo-key.sh) Bash(date *) Bash(echo *) Bash(git branch --show-current) Bash(git status *) Bash(git log *)
 ---
 

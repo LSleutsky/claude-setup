@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Prints the framework rules under ~/.claude/stacks that this repo's package.json dependencies call for.
-# Path-scoped rules cannot tell an Expo screen from a web component; the dependency list can.
-# Used by session-context.sh at session start and by the reviewer agent.
+# Path-scoped rules cannot tell a React Native screen from a web component; the dependency list can.
+# Used by session-context.sh at session start.
 
 set -u
 
@@ -24,7 +24,7 @@ dependencies=$(jq -r '(.dependencies // {}) + (.devDependencies // {}) + (.peerD
 has() { printf '%s\n' "$dependencies" | grep -qxF -- "$1"; }
 
 selected=()
-has expo && selected+=(expo)
+has react-native && selected+=(react-native)
 has next && selected+=(nextjs)
 has @nestjs/core && selected+=(nestjs)
 { has @tanstack/react-router || has @tanstack/react-start; } && selected+=(tanstack-router)

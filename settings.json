@@ -16,12 +16,34 @@
       "Bash(yarn run format:check *)",
       "Bash(yarn lint *)",
       "Bash(yarn typecheck *)",
+      "Bash(bun run lint *)",
+      "Bash(bun run typecheck *)",
+      "Bash(bun lint *)",
+      "Bash(bun typecheck *)",
       "Bash(npx tsc --noEmit *)",
+      "Bash(npx eslint *)",
+      "Bash(npx oxlint *)",
+      "Bash(npx prettier --check *)",
+      "Bash(npx oxfmt --check *)",
+      "Bash(npx biome check *)",
+      "Bash(npm test *)",
+      "Bash(pnpm test *)",
+      "Bash(yarn test *)",
+      "Bash(bun test *)",
+      "Bash(npx vitest run *)",
+      "Bash(npx jest *)",
       "Bash(git status *)",
       "Bash(git diff *)",
       "Bash(git log *)",
+      "Bash(git show *)",
+      "Bash(git rev-parse *)",
+      "Bash(git merge-base *)",
+      "Bash(git ls-files *)",
+      "Bash(git remote get-url *)",
       "Bash(git branch --show-current)",
-      "Bash(~/.claude/hooks/stack-rules.sh)"
+      "Bash(~/.claude/hooks/stack-rules.sh)",
+      "Bash(~/.claude/hooks/repo-key.sh)",
+      "Bash(~/.claude/hooks/base-ref.sh)"
     ],
     "ask": [
       "Bash(git commit *)",
@@ -43,24 +65,54 @@
       "Bash(pip install *)",
       "Bash(uv add *)",
       "Bash(cargo add *)",
-      "Bash(go get *)"
+      "Bash(go get *)",
+      "Bash(rm -r *)",
+      "Bash(rm -rf *)",
+      "Bash(rm -fr *)",
+      "Bash(rm -R *)",
+      "Bash(rm -Rf *)",
+      "Bash(rm -fR *)",
+      "Bash(rm --recursive *)",
+      "Bash(find * -delete)",
+      "Bash(git reset --hard *)",
+      "Bash(git clean *)",
+      "Bash(git checkout -- *)",
+      "Bash(git checkout .)",
+      "Bash(git restore *)",
+      "Bash(git stash drop *)",
+      "Bash(git stash clear)",
+      "Bash(git branch -D *)",
+      "Bash(git rebase *)",
+      "Bash(git tag -d *)"
     ],
     "deny": [
       "Read(.env)",
       "Read(.env.*)",
       "Read(!.env.example)",
       "Read(!.env.sample)",
-      "Read(!.env.template)"
+      "Read(!.env.template)",
+      "Read(~/.ssh/**)",
+      "Read(~/.aws/**)",
+      "Read(**/*.pem)",
+      "Read(**/*.key)",
+      "Read(**/*.p12)",
+      "Read(**/id_rsa*)",
+      "Read(**/id_ed25519*)"
     ]
   },
   "hooks": {
     "SessionStart": [
       {
-        "matcher": "startup|resume|clear|compact",
+        "matcher": "startup|resume|clear|compact|fork",
         "hooks": [
           {
             "type": "command",
             "command": "~/.claude/hooks/session-context.sh",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/stack-rules.sh",
             "timeout": 5
           }
         ]
@@ -95,7 +147,7 @@
           {
             "type": "command",
             "command": "~/.claude/hooks/post-edit-check.sh",
-            "timeout": 60
+            "timeout": 120
           }
         ]
       }
@@ -107,6 +159,18 @@
             "type": "command",
             "command": "~/.claude/hooks/typecheck-on-stop.sh",
             "timeout": 180
+          }
+        ]
+      }
+    ],
+    "DirectoryAdded": [
+      {
+        "matcher": "slash_command",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/add-dir.sh",
+            "timeout": 5
           }
         ]
       }

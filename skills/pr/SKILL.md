@@ -2,22 +2,21 @@
 name: pr
 description: Write a short, human PR description for the current branch. Runs in a side context so the diff never enters the main session. Output only. Manual only.
 disable-model-invocation: true
-argument-hint: "[base ref, default main] [optional ticket id]"
 context: fork
 agent: general-purpose
 background: false
-allowed-tools: Read Bash(git diff *) Bash(git log *) Bash(git merge-base *) Bash(git branch --show-current)
+effort: medium
+allowed-tools: Read Bash(git diff *) Bash(git log *) Bash(git branch --show-current) Bash(~/.claude/hooks/base-ref.sh)
 ---
 
 You are writing a pull request description. You have no memory of how this code was written; work only from the branch.
 
 Branch: !`git branch --show-current`
-Commits: !`git log --oneline main..HEAD`
-Files: !`git diff --stat main...HEAD`
+Base: !`~/.claude/hooks/base-ref.sh`
+Commits: !`git log --oneline "$(~/.claude/hooks/base-ref.sh)"..HEAD`
+Files: !`git diff --stat "$(~/.claude/hooks/base-ref.sh)"...HEAD`
 
-Arguments: $ARGUMENTS
-
-The first argument, if present, is the base ref; default `main`. The second, if present, is a ticket id.
+The ticket id is the first `ABC-123` style token in the branch name or the commit messages above, else none.
 
 Read `git diff <base>...HEAD` only as far as needed to know what changed and why. Then write the description and stop. Do not edit anything.
 
@@ -29,7 +28,7 @@ Read `git diff <base>...HEAD` only as far as needed to know what changed and why
 - Plain text only. No headers, no bold, no emoji, no checklists, no template sections.
 - Written the way you would explain it to a teammate at their desk. Present tense, active voice.
 - Say what changed and why, in that order. Say what a reviewer should look at if one thing needs attention. Say what was deliberately left out if the ticket might make someone expect it.
-- If a ticket id was given, it is the first line by itself.
+- If a ticket id is known, it is the first line by itself.
 
 ## Never
 

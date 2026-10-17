@@ -5,8 +5,9 @@ disable-model-invocation: true
 argument-hint: "[path, default the repo root]"
 ---
 
-Scope: !`echo "${ARGUMENTS:-.}"`
-Files in scope: !`git ls-files ${ARGUMENTS:-.} | wc -l`
+Arguments: $ARGUMENTS
+
+The scope is the argument when one was given, else the repo root `.`.
 
 Invoke the `architect` subagent with exactly this instruction and nothing else from this session: "Audit the architecture under `<scope>` in the current directory."
 

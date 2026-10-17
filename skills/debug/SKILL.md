@@ -19,6 +19,7 @@ Sequence. Do not skip a step or reorder them.
 4. State one hypothesis for the root cause, in one sentence, before touching code.
 5. Change one thing that tests the hypothesis. If it was wrong, say so and return to step 4. Never stack changes.
 6. Fix the root cause, not the symptom. If the real fix is out of scope, say so and stop; do not patch around it.
-7. Reply with a one-line commit message that names the root cause. `fix(auth): refresh token before expiry, not after`.
+7. Verify: the hooks came back clean, the existing tests for the touched code pass (through `runner`), and the reproduction from step 1 no longer reproduces. State what ran and the result.
+8. Reply with a one-line commit message that names the root cause, with the ticket id when one is known. `fix(auth): refresh token before expiry, not after (ABC-123)`.
 
-Do not add logging that outlives the fix. Do not write or run tests unless told to. Do not remove error handling to make something pass.
+Do not add logging that outlives the fix. Do not write new tests unless told to. Do not remove error handling to make something pass.

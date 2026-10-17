@@ -21,7 +21,25 @@ manifest="$target/.claude-setup-manifest"
 command -v jq >/dev/null 2>&1 || { echo "jq is required. Install it and rerun." >&2; exit 1; }
 [ -f "$repo_dir/CLAUDE.md" ] || { echo "run this from the setup repo" >&2; exit 1; }
 
-mkdir -p "$target/rules" "$target/stacks" "$target/hooks" "$target/skills" "$target/agents" "$target/context" "$target/worklogs" "$target/docs" "$backups"
+# The DirectoryAdded hook behind /add-dir needs Claude Code 2.1.219 or newer. Warn, never fail.
+version_at_least() {
+  local IFS=.
+  local -a have=($1) want=($2)
+  local i
+  for i in 0 1 2; do
+    [ "${have[$i]:-0}" -gt "${want[$i]:-0}" ] && return 0
+    [ "${have[$i]:-0}" -lt "${want[$i]:-0}" ] && return 1
+  done
+  return 0
+}
+if command -v claude >/dev/null 2>&1; then
+  installed_version=$(claude --version 2>/dev/null | awk '{print $1}')
+  if [ -n "$installed_version" ] && ! version_at_least "$installed_version" 2.1.219; then
+    echo "warning: Claude Code $installed_version is older than 2.1.219; /add-dir will not unlock writes until you update." >&2
+  fi
+fi
+
+mkdir -p "$target/rules" "$target/stacks" "$target/hooks" "$target/skills" "$target/agents" "$target/context" "$target/worklogs" "$target/docs" "$target/plans" "$backups"
 
 backup="$backups/$(date +%Y%m%d-%H%M%S)"
 mkdir -p "$backup"

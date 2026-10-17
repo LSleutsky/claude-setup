@@ -6,7 +6,7 @@ Replaces `~/.claude/CLAUDE.md`, `rules/`, `stacks/`, `hooks/`, every skill and a
 
 ## Install on any machine
 
-Requires Claude Code (*run once so `~/.claude/` exists*) and `jq`.
+Requires Claude Code (run once so `~/.claude/` exists) and `jq`.
 
 ```bash
 git clone <this repo> ~/dev/claude-setup
@@ -16,37 +16,44 @@ bash install.sh
 
 Rerun after every pull or edit.
 
-## Access to sibling repos
-(*e.g., a work machine with a BFF and services next to the app*)
+## What loads when
 
-This is machine state, not setup. Add the paths once, on that machine, and the installer preserves them:
+- `CLAUDE.md`: every session, every machine. Judgement rules only, under 100 lines.
+- `rules/*.md`: when Claude touches a matching file (`paths` in the frontmatter). JavaScript and TypeScript, TypeScript types, React, tests, accessibility.
+- `stacks/*.md`: at session start, chosen from `package.json` dependencies, because a `.tsx` screen and a `.tsx` web component look the same. React Native, Next.js, NestJS, TanStack. In a monorepo every workspace's dependencies count, so a repo with a web app and a mobile app loads both.
+- `hooks/`: deterministic. Format and lint every edit, typecheck when the turn ends, block env files, lockfiles, migrations, and writes outside the working directories, inject the repo context at start.
+- Skills with `disable-model-invocation: true` cost nothing until you type them.
+
+## Writing outside the current repo
+
+Other repos are read-only by default; the guard blocks the write and says so. Two unlocks, both machine state, never in this repo:
+
+- This session: `/add-dir /path/to/other-repo`.
+- Every session on this machine: add the path to `permissions.additionalDirectories` in `~/.claude/settings.json`. The installer preserves it.
 
 ```bash
-jq '.permissions.additionalDirectories = ["/path/to/bff", "/path/to/service-one", "/path/to/service-two"]' \
+jq '.permissions.additionalDirectories = ["/path/to/bff", "/path/to/obsidian/handoffs"]' \
   ~/.claude/settings.json > /tmp/s && mv /tmp/s ~/.claude/settings.json
 ```
 
-Or answer the prompt when Claude first reads outside the repo. Nothing breaks without it. Absolute paths never enter this repo, which is why it can be public.
+Env files, lockfiles, migrations, anything under `.git/`, and Claude Code settings files stay blocked everywhere; you edit those by hand. The installed setup under `~/.claude` is blocked too: it changes here, then `bash install.sh`. Destructive commands (`rm -rf`, `git reset --hard`, `git clean`, `git rebase`, and the like) prompt before they run.
 
 ## A repo that already has a `.claude` folder
 
-`git ls-files .claude` shows the team's files, leave them; they load alongside yours and `/map` reads a repo `CLAUDE.md` rather than repeating it.
-
-Untracked `settings.local.json` is only past "don't ask again" answers, safe to delete.
-
-If a repo `CLAUDE.md` has the same rules I do, delete my lines.
+`git ls-files .claude` shows the team's files, leave them; they load alongside yours and `/map` reads a repo `CLAUDE.md` rather than repeating it. Untracked `settings.local.json` is only past "don't ask again" answers, safe to delete. If a repo `CLAUDE.md` has the same rules I do, delete my lines.
 
 ## Verify
 
 In a TypeScript repo, run `claude`:
 
-- `/context`: `~/.claude/CLAUDE.md` listed with a token count; the rule files not yet.
-- Have Claude read a `.tsx`; `/context` again: both rule files listed. If they werelisted before any file was touched, see section 10 item 1.
-- `/hooks`: four hooks under User settings. `/permissions`: allow and ask lists.
-- `/` shows `ac`, `log`, `map`, `note`.
-- Ask for an unused variable in a `.ts` file: Claude receives eslint output, removes it.
+- `/context`: `~/.claude/CLAUDE.md` listed; no rule files yet.
+- Have Claude read a `.tsx`; `/context` again: the javascript, typescript, react, and accessibility rules are listed.
+- `/hooks`: SessionStart (two), PreToolUse (two), PostToolUse, Stop, DirectoryAdded under User settings. `/permissions`: allow and ask lists.
+- `/` shows `ac`, `continue`, `handoff`, `review`, `debug`, `log`, `map`, `note`, `pr`.
+- Ask for an unused variable in a `.ts` file: Claude receives the lint output and removes it.
 - Ask for a string assigned to a number: ending the turn surfaces the `tsc` error.
-- Ask Claude to edit a file in another repo: blocked with a message.
+- Ask Claude to edit a file in another repo: blocked with a message naming `/add-dir`.
+- `/doctor prompt-audit`: no contradictions between `CLAUDE.md`, rules, skills, and agents.
 
 ## First session in any repo
 
@@ -64,14 +71,20 @@ Read the file it shows. Fix anything wrong with `/note` or by editing `~/.claude
 
 ## Daily use
 
-**Any task.** Type it. `CLAUDE.md` makes Claude plan first for non-trivial work. Force plan mode with `Shift+Tab`. Edits trigger the lint hook silently; ending a turn triggers typecheck if code changed.
+**Any task.** Type it. Claude plans first when the change spans files or the approach is uncertain, and skips the plan when the diff fits in one sentence. Force plan mode with `Shift+Tab`. Edits trigger the format and lint hook silently; ending a turn triggers typecheck if code changed.
 
-**A ticket.** `/ac ` then paste the criteria on the same line, then Enter. Claude reads what the AC touches, lists `TODO`s, batches questions, gives a phased plan, stops. Approve. After each phase: commit message, you review the diff, "next phase" or corrections. Claude never commits.
+**A ticket.** `/ac ABC-123 ticket:` then paste the criteria on the same line, then Enter. Claude reads what the AC touches, lists `TODO`s, batches questions with defaults, gives a phased plan, stops. Approve. After each phase: hooks clean, existing tests run, evidence, one commit message ending in `(ABC-123)`, you review the diff, "next phase" or corrections. Claude never commits.
 
-**A change that spans two repos.** One session per repo; the handoff is a paragraph in Claude's reply, not a file. `/ac` writes it when it finds the other repo lacks what the AC needs. Check out a branch in that repo, open a session there, paste the handoff into `/ac`. Own plan, own review, own commit message, own hooks. If the handoff will wait until a future session, `/log` captures it under `Open`.
+**Review.** `/review` reviews every file changed since the default branch (origin's `HEAD`, else `main`) plus uncommitted changes, like a PR review: defects only, each one verified against the code, at most ten. `No findings.` is the normal result for sound work. Approve by number; it applies only those. The bundled `/code-review` is a free second opinion; only `/code-review ultra` costs money.
 
-**Pointing at files.** Once: `@path` in the message. Every session in this repo: `/note` a pointer, never the content. Every time there's a task, anywhere: a skill. Still point at things Claude cannot discover (*tickets, specs, meeting decisions*); the goal is never to point twice.
+**Stopping for the day mid-plan.** `/continue ~/Obsidian/handoffs/ABC-123.md`. It writes a document with the task, the plan with each phase's status, decisions, what is verified, and the exact next action. Next session, in the same repo: `/ac` and paste the document. It starts at the next action with no questions. The folder must be writable: `/add-dir` it, or put it in `additionalDirectories`.
 
-**Something worth keeping.** `/note it` (repo fact) or edit `CLAUDE.md` in this repo and rerun the installer. Do not use the `#` shortcut for the latter; it writes to the installed copy, which the next install overwrites.
+**A change that needs other repos.** `/handoff`. From the AC and the plan it already knows which repos must change and what each must provide; it reads each target through `explorer`, fills a verified contract, and prints one handoff per repo. Open a session in each repo and paste its handoff into `/ac`. Own plan, own review, own commit messages. Code against a contract only after it landed.
 
-**End of session.** `/log`, or `/log <focus>`. Nothing is logged otherwise.
+**A bug, no ticket.** `/debug <symptom, trace, file>`. Reproduce, hypothesis, one change, root cause, verify, commit message.
+
+**Pointing at files.** Once: `@path` in the message. Every session in this repo: `/note` a pointer, never the content. Still point at things Claude cannot discover (tickets, specs, meeting decisions); the goal is never to point twice.
+
+**Something worth keeping.** `/note it` (repo fact), or edit this repo and rerun the installer. A new house convention for JavaScript or TypeScript goes under `## Conventions` in `rules/javascript.md`.
+
+**End of session.** `/log`, or `/log <focus>`. Nothing is logged otherwise. The last entry is injected at the next session start.
