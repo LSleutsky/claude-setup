@@ -21,7 +21,7 @@ Rerun after every pull or edit.
 - `CLAUDE.md`: every session, every machine. Judgement rules only, under 100 lines.
 - `rules/*.md`: when Claude touches a matching file (`paths` in the frontmatter). JavaScript and TypeScript, TypeScript types, React, tests, accessibility.
 - `stacks/*.md`: at session start, chosen from `package.json` dependencies, because a `.tsx` screen and a `.tsx` web component look the same. React Native, Next.js, NestJS, TanStack. In a monorepo every workspace's dependencies count, so a repo with a web app and a mobile app loads both.
-- `hooks/`: deterministic. Format and lint every edit, challenge every new code file the moment it is written, snapshot the repo at each prompt, and when the turn ends lint, format, and typecheck everything the turn changed by any tool and hold it to a budget of 150 changed lines and fewer than 3 new files (over it, the turn cannot end until every addition is deleted or justified). Block env files, lockfiles, and settings files, prompt before migrations and writes outside the working directories, inject the repo context at start.
+- `hooks/`: deterministic. Format and lint every edit, snapshot the repo at each prompt, and when the turn ends lint, format, and typecheck everything the turn changed by any tool and hold it to a budget of 150 changed lines and fewer than 3 new files (over it, the turn cannot end until every addition is deleted or justified). Block env files, lockfiles, and settings files, prompt before migrations and writes outside the working directories, inject the repo context at start.
 - Skills with `disable-model-invocation: true` cost nothing until you type them.
 
 ## Writing outside the current repo
@@ -54,7 +54,6 @@ In a TypeScript repo, run `claude`:
 - Ask for a string assigned to a number: ending the turn surfaces the `tsc` error.
 - Ask Claude to edit a file in another repo: a permission prompt names the path and `/add-dir`.
 - Ask for a change that is plainly more than 150 lines, or ask for three new files: ending the turn surfaces the budget message and Claude deletes or justifies each addition before it stops.
-- Have Claude create a `.ts` file: the new-file challenge appears in the transcript right after the write.
 - `/doctor prompt-audit`: no contradictions between `CLAUDE.md`, rules, skills, and agents.
 
 ## First session in any repo
