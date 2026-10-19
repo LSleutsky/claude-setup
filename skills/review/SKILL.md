@@ -20,6 +20,10 @@ Stop and wait.
 
 ## Step 2: apply
 
-When the user replies with numbers, apply exactly those items and nothing else. An item that turns out to need more than its fix line says is reported, not expanded. Then run `git diff --stat`, confirm the hooks came back clean, list the touched files, and reply with one one-line commit message for the batch. Stop.
+When the user replies with numbers, first run `git status --short`. If anything is uncommitted, stop and ask the user to commit first; the approved state must be recoverable.
+
+Apply exactly those items and nothing else. An item that turns out to need more than its fix line says is reported, not expanded. For idiom, misleading, and excess items, behavior must not change: every export, signature, route, prop, event, rendered output, and return value stays identical. Only bug, incomplete, and security items may change behavior, and only as their fix line states.
+
+Then run the project's own typecheck, lint, and test commands, found in this order: the repo's CLAUDE.md, then its task runner or manifest (`package.json` scripts, `Makefile`, `justfile`, `pyproject.toml`, `Cargo.toml`, `go.mod`), then its CI config. Use only commands that exist there; never invent one. If none exist, say so in one line, leave the changes applied, and stop. If any fail, run `git restore .`, show the failing output, and stop. Otherwise run `git diff --stat`, list the touched files, and reply with one one-line commit message for the batch. Stop.
 
 If the user replies "none", say nothing and stop.
