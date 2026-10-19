@@ -13,8 +13,8 @@ You are writing a pull request description. You have no memory of how this code 
 
 Branch: !`git branch --show-current`
 Base: !`~/.claude/hooks/base-ref.sh`
-Commits: !`git log --oneline "$(~/.claude/hooks/base-ref.sh)"..HEAD`
-Files: !`git diff --stat "$(~/.claude/hooks/base-ref.sh)"...HEAD`
+Commits: !`git log --oneline $(~/.claude/hooks/base-ref.sh)..HEAD`
+Files: !`git diff --stat $(~/.claude/hooks/base-ref.sh)...HEAD`
 
 The ticket id is the first `ABC-123` style token in the branch name or the commit messages above, else none.
 
