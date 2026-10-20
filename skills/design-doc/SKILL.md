@@ -13,9 +13,9 @@ allowed-tools: Bash(echo *) Bash(test *) Bash(jq *) Bash(grep *) Bash(git *) Bas
 - Repo: !`~/.claude/hooks/repo-key.sh`
 - Version: !`if [ -f package.json ]; then jq -r .version package.json; elif [ -f Cargo.toml ]; then grep -m1 '^version' Cargo.toml | cut -d'"' -f2; elif [ -f pyproject.toml ]; then grep -m1 '^version' pyproject.toml | cut -d'"' -f2; elif git describe --tags --abbrev=0 >/dev/null 2>&1; then git describe --tags --abbrev=0; elif [ -f CHANGELOG.md ]; then grep -m1 -oE '[0-9]+\.[0-9]+\.[0-9]+' CHANGELOG.md; else echo unknown; fi`
 - Feature (branch): !`git branch --show-current`
-- Changed on this branch: !`git diff --name-only "$(~/.claude/hooks/base-ref.sh)"...HEAD | tr '\n' ' '`
-- Ticket ids in branch and commits: !`{ git branch --show-current; git log --format=%s "$(~/.claude/hooks/base-ref.sh)"..HEAD; } | grep -oE '[A-Z]{2,}-[0-9]+' | sort -u | tr '\n' ' '`
-- Commits: !`git log --oneline "$(~/.claude/hooks/base-ref.sh)"..HEAD | tr '\n' ';'`
+- Changed on this branch: !`git diff --name-only origin/HEAD...HEAD | tr '\n' ' '`
+- Ticket ids in branch and commits: !`{ git branch --show-current; git log --format=%s origin/HEAD..HEAD; } | grep -oE '[A-Z]{2,}-[0-9]+' | sort -u | tr '\n' ' '`
+- Commits: !`git log --oneline origin/HEAD..HEAD | tr '\n' ';'`
 - Decided since branch start: !`f="$HOME/.claude/worklogs/$(~/.claude/hooks/repo-key.sh).md"; test -f "$f" && grep -E '^- Decided:' "$f" | tail -n 20 | tr '\n' ';' || true`
 - Extra facts from the user: $ARGUMENTS
 
