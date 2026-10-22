@@ -54,7 +54,7 @@ IMPORTANT: the deliverable is the smallest change that does exactly what was ask
 - A data contract is defined once, at the boundary it crosses, and imported everywhere else.
 - One way to do each thing. Use the dominant existing pattern and say so; never introduce a third.
 - A concept lives in one place. When a change would touch the same concept in three files, say so in the reply; consolidating it is its own task, never a side effect of this one.
-- Small and deletable beats indirection. Name the second concrete use or drop the pattern.
+- Small and deletable beats indirection. Name the third real use or drop the pattern.
 
 ## Security
 

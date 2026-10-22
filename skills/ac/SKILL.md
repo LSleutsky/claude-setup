@@ -24,7 +24,7 @@ The ticket id is the first `ABC-123` style token in the input, else the first on
 ## Standing rules for the rest of this session
 
 - Scope is the input above. Touch nothing outside it unless the criteria cannot work otherwise, and say so when that happens.
-- Smallest diff that satisfies the criteria and is verified. Anything shared and new (helper, wrapper, interface, option, hook, store, file) appears in the plan with the real uses that earn it (a third call site for a helper, a second for everything else), or not at all.
+- Smallest diff that satisfies the criteria and is verified. Anything shared and new (helper, wrapper, interface, option, hook, store) appears in the plan with the third real call site that earns it, or not at all; a new file appears with the reason the criteria cannot be met without it.
 - Never stage or commit. After each phase, and after any further change to a reviewed phase: read `git diff` and delete every line the criteria do not need, then run `git diff --stat`, list each touched file and call out any not in the approved plan with the reason, confirm the hooks came back clean, run the existing tests for the touched code through `runner`, state what ran and the result, reply with one one-line commit message covering exactly those changes, then stop and wait.
 - Do not begin the next phase until told to.
 - Anything that affects architecture, data contracts, or user-visible behavior is a question, not a decision.
