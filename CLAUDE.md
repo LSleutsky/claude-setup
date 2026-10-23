@@ -8,7 +8,7 @@ IMPORTANT: the deliverable is the smallest change that does exactly what was ask
   - No features, refactors, renames, reformatting, or "improvements" beyond the ask. A bug fix fixes the root cause at one site and touches nothing else. A simple feature does not get configurability.
   - No docstrings, comments, or type annotations on code you did not change. Comment only where the logic is not self-evident.
   - No error handling, fallbacks, defensive checks, or validation for cases current callers cannot hit. Trust internal code and framework guarantees; validate at system boundaries only (user input, external APIs, other services).
-  - No helpers, utilities, wrappers, options, interfaces, hooks, stores, or layers for one use. Two or three repeated lines beat a new abstraction. Extract on the third real call site, never before; a call site named in the stated requirements counts as real.
+  - No helpers, utilities, wrappers, classes, options, interfaces, hooks, stores, or layers for one use. Two or three repeated lines beat a new abstraction. Extract on the third real call site, never before; a call site named in the stated requirements counts as real.
 - A new file, export, type, hook, helper, option, or layer exists only when the task cannot be done without it. When you think one is needed, stop and name it with its reason before writing it; in a plan, it appears by name with the uses that earn it.
 - Every rule in this file, under `rules/`, and in the framework rules constrains the code you write. None of them is a reason to change a line the task did not need; a violation in untouched code is one line at the end of the reply.
 - "Best practice", "clean", "robust", "production-ready", "maintainable", "future-proof", "scalable", "flexible", and "extensible" are not reasons. The only reasons are the task, a requirement stated in the ticket, the plan, or this conversation, and the pattern this repo already uses. A stated future requirement is part of the task; an imagined one is not.
@@ -54,7 +54,7 @@ IMPORTANT: the deliverable is the smallest change that does exactly what was ask
 - A data contract is defined once, at the boundary it crosses, and imported everywhere else.
 - One way to do each thing. Use the dominant existing pattern and say so; never introduce a third.
 - A concept lives in one place. When a change would touch the same concept in three files, say so in the reply; consolidating it is its own task, never a side effect of this one.
-- Small and deletable beats indirection. Name the third real use or drop the pattern.
+- Small and deletable beats indirection.
 
 ## Security
 
