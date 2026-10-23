@@ -46,8 +46,27 @@ run_tool() {
   (cd "${tool%/node_modules/.bin/*}" && "$tool" "$@")
 }
 
-formatter=$(find_tool oxfmt)
-if [ -n "$formatter" ]; then
+# Prints the nearest directory from the file up to the repo root whose package.json has a `format` script. Empty when none.
+find_format_script_root() {
+  local dir
+  dir=$(dirname "$file_path")
+  while :; do
+    if [ -f "$dir/package.json" ] && jq -e '.scripts.format' "$dir/package.json" >/dev/null 2>&1; then
+      printf '%s\n' "$dir"
+      return
+    fi
+    if [ "$dir" = "$repo_root" ] || [ "$dir" = "/" ]; then
+      return
+    fi
+    dir=$(dirname "$dir")
+  done
+}
+
+# The repo's own `format` script wins, because a formatter configured by flags cannot discover that config from the file alone.
+format_root=$(find_format_script_root)
+if [ -n "$format_root" ]; then
+  (cd "$format_root" && npm run --silent format -- "$file_path") >/dev/null 2>&1
+elif formatter=$(find_tool oxfmt) && [ -n "$formatter" ]; then
   run_tool "$formatter" "$file_path" >/dev/null 2>&1
 elif formatter=$(find_tool biome) && [ -n "$formatter" ]; then
   run_tool "$formatter" format --write "$file_path" >/dev/null 2>&1
