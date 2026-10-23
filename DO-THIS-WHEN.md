@@ -39,7 +39,6 @@
 | Day ends mid-plan | Write everything the next session needs | `/continue <path in Obsidian>` |
 | Next session | Pick up at the exact next action, no questions | `/ac <paste the Continue document>` |
 | Claude must write to another repo or the handoff folder this session | Approve the prompt once, or unlock the directory for the session | approve, or `/add-dir <path>` |
-| Same conversation, later today | Resume the transcript itself | `claude --continue` or `/resume` |
 
 ## Across repos
 

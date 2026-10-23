@@ -48,7 +48,7 @@ In a TypeScript repo, run `claude`:
 
 - `/context`: `~/.claude/CLAUDE.md` listed; no rule files yet.
 - Have Claude read a `.tsx`; `/context` again: the javascript, typescript, react, and accessibility rules are listed.
-- `/hooks`: SessionStart (two), UserPromptSubmit, PreToolUse (two), PostToolUse, Stop, DirectoryAdded under User settings. `/permissions`: allow and ask lists.
+- `/hooks`: SessionStart (two), UserPromptSubmit, PreToolUse (two), PostToolUse, Stop, SessionEnd, DirectoryAdded under User settings. `/permissions`: allow and ask lists.
 - `/` shows `ac`, `audit`, `continue`, `council`, `debug`, `design`, `design-doc`, `explain`, `handoff`, `log`, `map`, `note`, `pr`, `research`, `review`.
 - Ask for an unused variable in a `.ts` file: Claude receives the lint output and removes it.
 - Ask for a string assigned to a number: ending the turn surfaces the `tsc` error.

@@ -26,7 +26,7 @@ if [ "$(jq -r '.stop_hook_active // false' <<<"$input")" = "true" ]; then
   blocks=$(cat "$blocks_file" 2>/dev/null || printf 0)
 fi
 if [ "$blocks" -ge 2 ]; then
-  rm -f "$marker" "$blocks_file"
+  rm -f "$marker" "$blocks_file" "$snapshot"
   exit 0
 fi
 
@@ -82,7 +82,7 @@ if [ -f "$marker" ]; then
 fi
 changes=$(printf '%s\n' "$changes" | awk -F'\t' 'NF == 3 && !seen[$3]++')
 if [ -z "$changes" ]; then
-  rm -f "$marker" "$blocks_file"
+  rm -f "$marker" "$blocks_file" "$snapshot"
   exit 0
 fi
 
@@ -200,5 +200,5 @@ if [ "$failed" -ne 0 ]; then
   exit 2
 fi
 
-rm -f "$blocks_file"
+rm -f "$blocks_file" "$snapshot"
 exit 0
