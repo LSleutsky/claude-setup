@@ -1,9 +1,6 @@
 {
   "permissions": {
     "defaultMode": "auto",
-    "env": {
-      "CLAUDE_CODE_SKIP_PROMPT_HISTORY": "1"
-    },
     "allow": [
       "Bash(npm run lint *)",
       "Bash(npm run typecheck *)",
@@ -52,8 +49,6 @@
     "ask": [
       "Bash(git commit *)",
       "Bash(git push *)",
-      "Bash(git checkout -b *)",
-      "Bash(git switch -c *)",
       "Bash(npm install *)",
       "Bash(npm i *)",
       "Bash(npm uninstall *)",
@@ -209,5 +204,6 @@
     "CLAUDE_CODE_SKIP_PROMPT_HISTORY": "1",
     "CLAUDE_CODE_DISABLE_FILE_CHECKPOINTING": "1"
   },
-  "cleanupPeriodDays": 1
+  "cleanupPeriodDays": 1,
+  "bashEditDiffEnabled": false
 }

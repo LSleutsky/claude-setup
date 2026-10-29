@@ -87,7 +87,7 @@ find "$target/skills" "$target/agents" -name .DS_Store -delete
 # settings.json: replace only the keys this repo owns. jq's * is a recursive object
 # merge, so machine-local keys such as permissions.additionalDirectories survive.
 existing="{}"
-[ -f "$target/settings.json" ] && existing=$(jq 'del(.permissions.allow, .permissions.ask, .permissions.deny, .hooks)' "$target/settings.json")
+[ -f "$target/settings.json" ] && existing=$(jq 'del(.permissions.allow, .permissions.ask, .permissions.deny, .permissions.env, .hooks)' "$target/settings.json")
 jq -s '.[0] * .[1]' <(echo "$existing") "$repo_dir/settings.json" >"$target/settings.json.tmp"
 mv "$target/settings.json.tmp" "$target/settings.json"
 
