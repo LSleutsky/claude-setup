@@ -1,6 +1,6 @@
 # React Router (framework mode)
 
-The repo's existing way of doing each of these wins; these apply where it has none. The names below are the current API; the installed major in `package.json` decides which API applies, and a difference is said out loud. `@react-router/dev` means framework mode and every rule below applies; plain `react-router` is data mode (`createBrowserRouter` carries loaders and actions) or declarative mode (matching and navigation only), where the route module exports do not exist.
+The repo's existing way of doing each of these wins; these apply where it has none. They assume React Router 8 or newer. Check `package.json` first; on an older major use that version's API and say so. `@react-router/dev` means framework mode and every rule below applies; plain `react-router` is data mode (`createBrowserRouter` carries loaders and actions) or declarative mode (matching and navigation only), where the route module exports do not exist.
 
 - Routes are declared in `app/routes.ts` with `route`, `index`, `layout`, and `prefix`. File-system routes (`@react-router/fs-routes`) only where the repo already uses them.
 - Route loaders own data. `loader` runs on the server and is removed from the client bundle; `clientLoader` runs in the browser. When the client must load before first render, `clientLoader.hydrate = true as const` with a `HydrateFallback`. The component reads `loaderData` from `Route.ComponentProps`. A component that fetches on mount is a bug.

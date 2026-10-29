@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # PreToolUse hook (Bash). Covers what the Read deny rules and write-guard.sh cannot see inside a shell command:
 #
-#   - Any use of a real env file, and shell writes to lockfiles, migrations and .git internals.
+#   - Any use of a real env file, and shell writes to lockfiles, migrations, .git internals and Claude Code settings files.
 #
 # Exit 2 blocks and shows stderr to Claude.
 set -u
@@ -28,10 +28,10 @@ for token in $command; do
 done
 set +f
 
-protected='(package-lock\.json|pnpm-lock\.yaml|yarn\.lock|bun\.lockb?|Cargo\.lock|go\.sum|uv\.lock|poetry\.lock|(^|[[:space:]"'"'"'/])migrations?/|(^|[[:space:]"'"'"'/])\.git(/|[[:space:]"'"'"']|$))'
+protected='(package-lock\.json|pnpm-lock\.yaml|yarn\.lock|bun\.lockb?|Cargo\.lock|go\.sum|uv\.lock|poetry\.lock|(^|[[:space:]"'"'"'/])migrations?/|(^|[[:space:]"'"'"'/])\.git(/|[[:space:]"'"'"']|$)|\.claude/settings(\.local)?\.json)'
 writes='(^|[^[:alnum:]_-])(rm|mv|cp|tee|truncate|dd)[[:space:]]|sed[[:space:]]+(-[^[:space:]]+[[:space:]]+)*-[[:alnum:]]*i|perl[[:space:]]+-[[:alnum:]]*i|[^0-9&]>'
 if printf '%s' "$command" | grep -Eq "$protected" && printf '%s' "$command" | grep -Eq "$writes"; then
-  block "lockfiles, migrations and .git internals change only through their own tool or by the user. Say what must change and stop."
+  block "lockfiles, migrations, .git internals and Claude Code settings files change only through their own tool or by the user. Say what must change and stop."
 fi
 
 exit 0

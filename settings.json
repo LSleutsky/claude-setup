@@ -156,7 +156,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/post-edit-check.sh",
+            "command": "~/.claude/hooks/post-edit-check.sh --record-only",
             "timeout": 120
           }
         ]

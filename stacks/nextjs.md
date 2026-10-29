@@ -1,6 +1,6 @@
 # Next.js (App Router)
 
-The repo's existing way of doing each of these wins; these apply where it has none. The names below are the current API; the installed major in `package.json` decides which API applies, and a difference is said out loud.
+The repo's existing way of doing each of these wins; these apply where it has none. They assume Next.js 16 or newer. Check `package.json` first; on an older major use that version's API and say so.
 
 - Server Components by default. `"use client"` goes on the file that defines the interactive component, never on a large part of the tree. A client component receives server data as props; it fetches only data that did not exist at render time, through the repo's query library.
 - Data is fetched where it is rendered, in Server Components or route handlers. No client-side fetching of data that was available at render time.

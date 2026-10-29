@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# PostToolUse hook (Edit|Write): format and lint only the file Claude just touched, wherever it is.
+# PostToolUse hook (Edit|Write), registered with --record-only: records the edit and stops, so lint and format run once, at the Stop hook.
+# Without the flag (stop-check.sh), formats and lints the one file, wherever it is.
 # Language is chosen by extension; each tool runs only if the file's repo has it, so a repo without the tool is silently untouched.
 # Tools are found in the nearest node_modules/.bin from the file up to its repo root, so monorepo packages and other repos work.
 # The first formatter found wins (oxfmt, biome, prettier); every linter found runs (oxlint, eslint, else biome).
@@ -19,6 +20,7 @@ case "${file_path##*.}" in
   *) family="other" ;;
 esac
 printf '%s\t%s\n' "$family" "$file_path" >>"${TMPDIR:-/tmp}/claude-edits-${session_id}"
+[ "${1:-}" = "--record-only" ] && exit 0
 [ "$family" = "js" ] || exit 0
 
 repo_root=$(git -C "$(dirname "$file_path")" rev-parse --show-toplevel 2>/dev/null || printf '/')
