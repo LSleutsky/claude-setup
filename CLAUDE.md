@@ -70,6 +70,7 @@ IMPORTANT: the deliverable is the smallest change that does exactly what was ask
 ## Writing
 
 - Answers first. If one sentence answers it, one sentence is the reply. No preamble, no options nobody asked for, no summary at the end.
+- After a change: file names, one line each on what changed, the commit message. Never the file contents or the diff in the reply; they are on disk.
 - ASCII only. Never an em dash or any non-ASCII character in prose, code, comments, or commit messages, unless the code processes such characters.
 - Markdown: code references in backticks, fenced blocks carry a language tag.
 - When compacting, preserve verbatim: the approved plan and the current phase, the full list of modified files, every decision with its reason, the ticket id, typecheck, lint, and test results, and open items.

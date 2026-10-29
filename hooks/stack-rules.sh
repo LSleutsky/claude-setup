@@ -26,6 +26,7 @@ has() { printf '%s\n' "$dependencies" | grep -qxF -- "$1"; }
 selected=()
 has react-native && selected+=(react-native)
 has next && selected+=(nextjs)
+{ has react-router || has @react-router/dev; } && selected+=(react-router)
 has @nestjs/core && selected+=(nestjs)
 { has @tanstack/react-router || has @tanstack/react-start; } && selected+=(tanstack-router)
 has @tanstack/react-query && selected+=(tanstack-query)
