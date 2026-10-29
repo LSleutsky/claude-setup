@@ -46,7 +46,7 @@ IMPORTANT: the deliverable is the smallest change that does exactly what was ask
 - Keep existing intentional logging. No stray debug output.
 - Performance at design time: no N+1, no accidental O(n^2), no refetch of data already in hand, no unbounded lists or payloads, nothing on the main thread that could be deferred. Beyond that, optimize only with a profile, and say what it showed.
 - Use the package manager the lockfile indicates. Never install to see if it fixes something.
-- Comments: rare, one sentence, why not what, plain first person, identifiers in backticks. Never a banner, never a comment that restates the next line.
+- Comments: rare, one sentence, why not what, plain first person, identifiers in backticks. Never a banner, never a comment that restates the next line, never a comment about the task, the change, or what the code used to do; that belongs in the commit message.
 
 ## Structure
 

@@ -11,7 +11,7 @@ The repo's existing way of doing each of these wins; these apply where it has no
 - Never widen a type to bypass an error. Fix the data flow instead of reaching for `any`, a type assertion, or a non-null `!`. Assertions and `!` are erased, never checked; `!` only where the value is provably present on that line.
 - If a suppression is unavoidable, `@ts-expect-error` with the reason on the same line. Never `@ts-ignore`.
 - Data from outside the process (responses, params, storage, `JSON.parse`) is `unknown` until the repo's validator parses it. Infer the type from that schema; never declare the same shape twice.
-- Narrow with type guards and discriminated unions, never with assertions.
+- Narrow with type guards and discriminated unions, never with assertions. A `switch` over a union is exhaustive: `default` assigns the value to `never`.
 - `satisfies` checks a literal against a type without widening it: config objects, lookup tables, route maps.
 - Index access can be `undefined` under `noUncheckedIndexedAccess`; handle it at the access, not with `!`.
 - No `enum`; a union of string literals or an `as const` object replaces it. When the repo sets `erasableSyntaxOnly`, also no `namespace` with runtime code and no constructor parameter properties. NestJS repos keep their `private readonly` constructor injection.
@@ -26,6 +26,7 @@ The repo's existing way of doing each of these wins; these apply where it has no
 - Only on exported components, custom hooks, and standalone utility files. Never on `useCallback`, `useEffect`, or helpers defined inside a component body.
 - One sentence per line. Short sentences. Concise, high level, unambiguous.
 - Blank line between the description and the first `@param`. All `@param` lines grouped with no blank lines between them. Blank line between the last `@param` and `@returns`.
+- `@param name - Description`: the name exactly as declared, a hyphen with one space on each side, then the description. No type in braces; the signature carries it. One `@param` per parameter, in declaration order, none omitted.
 - `@returns` always carries the type: `@returns {boolean} Whether the device was paired`.
 - One `@example` only when it significantly improves understanding of a complex function. Blank line between `@example` and `@returns`.
 - Components: a one or two line description, a blank line, then a short `@returns {JSX.Element} ...`.

@@ -10,6 +10,7 @@ The repo's existing test style wins: its runner, its helpers, its file placement
 
 - Test behavior through the public surface, never implementation details. A refactor that keeps behavior must not break a test.
 - One behavior per test. The name reads as a sentence stating that behavior.
+- A test for a use case covers its failure outcome, not only success.
 - Arrange, act, assert, in that order, visibly.
 - Never mock the unit under test. Mock only what crosses a real boundary (network, clock, storage).
 - Assert on outcomes, not on calls, unless the call is the contract.

@@ -33,13 +33,17 @@ The repo's existing idioms, formatter, and linter win. Where they are silent, th
 - Every name says what the thing is or does: `minWithdrawalAmount`, `isSubmitting`, `fetchParticipants`, `participantsById`. Never `data`, `item`, `val`, `temp`, `res`, `obj`, `arr`, or a single letter outside an index loop.
 - Booleans read as questions: `is`, `has`, `can`, `should`.
 - Functions start with a verb. Handlers are `handleX` inside a component and `onX` as a prop.
+- `find` returns a value that may be absent; `get` returns one that must exist.
+- One name per concept across the repo. Never `user` in one file and `customer` in another unless the domain distinguishes them.
 - Parameters and props are named for what they carry, not their type: `participant`, not `p` or `obj`.
 
 ## Language
 
 - Strict equality. Optional chaining and nullish coalescing over manual null checks.
 - `async` and `await`. No floating promise: await it, return it, or `void` it with a one-line reason. Independent async work runs through `Promise.all`.
-- Throw `Error` or a subclass with a message, never a string or a plain object. `catch (error)` is `unknown`: narrow before use.
+- Throw `Error` or a subclass with a message, never a string or a plain object. Wrapping an error keeps the original as `cause`. `catch (error)` is `unknown`: narrow before use.
+- More than two parameters become one object parameter. No boolean parameter that selects a behavior; a literal union names the choice.
+- Never mutate a parameter; return a new value.
 - ESM modules. Nothing runs at import time beyond definitions.
 - Built-ins over helper packages: `Array.prototype.at`, `structuredClone`, `Object.groupBy`, `Intl`, `URL`, `AbortController`. No dependency for one function.
 - No `eval`, `new Function`, `with`, `arguments`, or prototype mutation.
