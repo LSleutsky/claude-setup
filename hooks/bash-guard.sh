@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # PreToolUse hook (Bash). Covers what the Read deny rules and write-guard.sh cannot see inside a shell command:
 #
-#   - Any use of a real env file, and shell writes to lockfiles, migrations, .git internals and Claude Code settings files.
+#   - Any use of a real env file or a credential file (npmrc, netrc, docker and kube configs), and shell writes to lockfiles, migrations, .git internals and Claude Code settings files.
 #
 # Exit 2 blocks and shows stderr to Claude.
 set -u
@@ -15,7 +15,7 @@ command -v jq >/dev/null 2>&1 || block "jq is missing, so the shell guard cannot
 command=$(jq -r '.tool_input.command // empty' 2>/dev/null) || block "the hook input is not valid JSON."
 [ -n "$command" ] || exit 0
 
-# Any whole token that is an env file path blocks, including inside quotes and after `--flag=`.
+# Any whole token that is an env or credential file path blocks, including inside quotes and after `--flag=`.
 # Example env files hold no secrets; reading them is fine, copying one to a real env file is the user's job.
 set -f
 for token in $command; do
@@ -24,6 +24,7 @@ for token in $command; do
   case "${token##*=}" in
     .env.example | .env.sample | .env.template | */.env.example | */.env.sample | */.env.template) ;;
     .env | .env.* | */.env | */.env.*) block "env files hold secrets and stay out of the session. Read .env.example for variable names, or ask the user." ;;
+    .npmrc | .netrc | */.npmrc | */.netrc | */.docker/config.json | */.kube/config) block "credential files hold tokens and stay out of the session. Ask the user." ;;
   esac
 done
 set +f

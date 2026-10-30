@@ -47,8 +47,6 @@
       "Bash(~/.claude/hooks/base-ref.sh)"
     ],
     "ask": [
-      "Bash(git commit *)",
-      "Bash(git push *)",
       "Bash(npm install *)",
       "Bash(npm i *)",
       "Bash(npm uninstall *)",
@@ -78,8 +76,6 @@
       "Bash(git checkout -- *)",
       "Bash(git checkout .)",
       "Bash(git restore *)",
-      "Bash(git stash drop *)",
-      "Bash(git stash clear)",
       "Bash(git branch -D *)",
       "Bash(git rebase *)",
       "Bash(git tag -d *)"
@@ -96,7 +92,19 @@
       "Read(**/*.key)",
       "Read(**/*.p12)",
       "Read(**/id_rsa*)",
-      "Read(**/id_ed25519*)"
+      "Read(**/id_ed25519*)",
+      "Read(**/.npmrc)",
+      "Read(**/.netrc)",
+      "Read(~/.docker/config.json)",
+      "Read(~/.kube/config)",
+      "Bash(git add *)",
+      "Bash(git stage *)",
+      "Bash(git rm *)",
+      "Bash(git mv *)",
+      "Bash(git stash)",
+      "Bash(git stash *)",
+      "Bash(git commit *)",
+      "Bash(git push *)"
     ]
   },
   "hooks": {

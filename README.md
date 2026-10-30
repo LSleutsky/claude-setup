@@ -21,7 +21,7 @@ Rerun after every pull or edit.
 - `CLAUDE.md`: every session, every machine. Judgement rules only, under 100 lines.
 - `rules/*.md`: when Claude touches a matching file (`paths` in the frontmatter). JavaScript and TypeScript, TypeScript types, React, tests, accessibility.
 - `stacks/*.md`: at session start, chosen from `package.json` dependencies, because a `.tsx` screen and a `.tsx` web component look the same. React Native, Next.js, React Router, NestJS, TanStack. In a monorepo every workspace's dependencies count, so a repo with a web app and a mobile app loads both.
-- `hooks/`: deterministic. Format and lint every edit, snapshot the repo at each prompt, and when the turn ends lint, format, and typecheck everything the turn changed by any tool and hold it to a budget of 150 added lines and fewer than 3 new files (over it, the turn cannot end until every addition is deleted or justified). Block env files, lockfiles, and settings files, prompt before migrations and writes outside the working directories, inject the repo context at start.
+- `hooks/`: deterministic. Format and lint every edit, snapshot the repo at each prompt, and when the turn ends lint, format, and typecheck everything the turn changed by any tool and hold it to a budget of 150 added lines and fewer than 3 new files (over it, the turn cannot end until every addition is deleted or justified). Block env and credential files, lockfiles, settings files, and every git command that stages, stashes, commits, or pushes, prompt before migrations and writes outside the working directories, inject the repo context at start.
 - Skills with `disable-model-invocation: true` cost nothing until you type them.
 
 ## Writing outside the current repo
