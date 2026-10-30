@@ -20,7 +20,7 @@ The ticket id is the first `ABC-123` style token in the branch name or the commi
 - Large PR: one opening sentence, then a short list of the meaningful changes, one line each. Meaningful means a reader would care; never one bullet per file.
 - Plain text only. No headers, no bold, no emoji, no checklists, no template sections.
 - Written the way you would explain it to a teammate at their desk. Present tense, active voice.
-- Say what changed and why, in that order. Say what a reviewer should look at if one thing needs attention. Say what was deliberately left out if the ticket might make someone expect it.
+- Say what changed and why, in that order. Mention something left out only when a commit message or a comment in the diff says it was deferred; never guess at what the ticket expected.
 - If a ticket id is known, it is the first line by itself.
 
 ## Never
@@ -52,8 +52,6 @@ This PR implements comprehensive enrollment date support for the participant lis
 AC-412
 
 Adds an Enrolled column to the participant list, sorted newest first by default. The date comes from the BFF's new enrolledAt field and shows a dash for participants who have not consented yet.
-
-Filtering and export are out of scope for this ticket and untouched. Worth a look: the empty state now renders when a study has no participants, which it did not before.
 ```
 
 Return the description as plain text and nothing else: no fence, no preface, no closing line. It is shown to the user unedited.
