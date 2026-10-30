@@ -3,7 +3,7 @@
 # Changed files are every Edit/Write recorded by post-edit-check.sh, plus every file in the launch repo whose uncommitted
 # state differs from the snapshot turn-start.sh took at the prompt, so shell edits count too.
 # Lint and format run through post-edit-check.sh for each changed JS/TS file. Typecheck runs once per repo: a `typecheck` script in the launch directory wins, then one at the repo root, else tsc per nearest tsconfig.json.
-# Budget: more than 150 lines added plus removed, or 3 or more new files, blocks the stop once with an order to delete or justify every addition.
+# Budget: more than 150 lines added, or 3 or more new files, blocks the stop once with an order to delete or justify every addition. Removed lines never count.
 # Blocking the stop is what makes the deletion pass happen.
 # Exit 2 blocks the stop and feeds stderr to Claude. At most two blocks per turn, so a fix round is re-checked and nothing loops.
 # To add a language: one case branch in post-edit-check.sh and one typecheck function here.
@@ -32,7 +32,7 @@ fi
 
 project_root=$(git -C "$project_dir" rev-parse --show-toplevel 2>/dev/null || true)
 
-# Prints "lines<TAB>new<TAB>path" per file in the launch repo whose state differs from the turn-start snapshot.
+# Prints "added<TAB>new<TAB>path" per file in the launch repo whose state differs from the turn-start snapshot.
 changes_since_snapshot() {
   [ -n "$project_root" ] && [ -f "$snapshot" ] || return 0
   {
@@ -42,29 +42,26 @@ changes_since_snapshot() {
     done
   } | awk -F'\t' -v OFS='\t' -v root="$project_root" '
     function num(value) { return value ~ /^[0-9]+$/ ? value + 0 : 0 }
-    function abs(value) { return value < 0 ? -value : value }
     FILENAME == ARGV[1] { before_added[$3] = ($1 == "U") ? num($2) : num($1); before_removed[$3] = ($1 == "U") ? 0 : num($2); next }
     {
       added = ($1 == "U") ? num($2) : num($1)
       removed = ($1 == "U") ? 0 : num($2)
       if ($3 in before_added) {
-        lines = abs(added - before_added[$3]) + abs(removed - before_removed[$3])
-        if (lines > 0) print lines, 0, root "/" $3
+        if (added != before_added[$3] || removed != before_removed[$3]) print (added > before_added[$3] ? added - before_added[$3] : 0), 0, root "/" $3
       } else {
-        print added + removed, ($1 == "U") ? 1 : 0, root "/" $3
+        print added, ($1 == "U") ? 1 : 0, root "/" $3
       }
     }' "$snapshot" -
 }
 
-# Prints "lines<TAB>new<TAB>path" for a file recorded by post-edit-check.sh that the snapshot cannot see.
+# Prints "added<TAB>new<TAB>path" for a file recorded by post-edit-check.sh that the snapshot cannot see.
 change_for_recorded_edit() {
   local path="$1" root
   root=$(git -C "$(dirname "$path")" rev-parse --show-toplevel 2>/dev/null) || return 0
   if git -C "$root" ls-files --error-unmatch -- "$path" >/dev/null 2>&1; then
-    read -r added removed _ < <(git -C "$root" diff --numstat HEAD -- "$path")
+    read -r added _ < <(git -C "$root" diff --numstat HEAD -- "$path")
     case "$added" in *[!0-9]* | '') added=0 ;; esac
-    case "$removed" in *[!0-9]* | '') removed=0 ;; esac
-    printf '%s\t0\t%s\n' "$((added + removed))" "$path"
+    printf '%s\t0\t%s\n' "$added" "$path"
   else
     printf '%s\t1\t%s\n' "$(wc -l <"$path" 2>/dev/null | tr -d ' ' || printf 0)" "$path"
   fi
@@ -189,7 +186,7 @@ if [ "$blocks" -eq 0 ]; then
   read -r lines new_files files < <(printf '%s\n' "$changes" | awk -F'\t' '{ lines += $1; new += $2; files++ } END { print lines + 0, new + 0, files + 0 }')
   if [ "$lines" -gt "$line_budget" ] || [ "$new_files" -ge "$new_file_budget" ]; then
     failed=1
-    message="${message}This turn changed $lines lines in $files files, $new_files of them new. The budget is $line_budget lines and fewer than $new_file_budget new files. Read \`git diff\` and the new files. Delete everything the task does not need: every file, abstraction, option, fallback, defensive check, comment, and reformatted line without a requirement behind it. Each new thing you keep gets one line in your reply naming the requirement that needs it. Then stop again."$'\n'
+    message="${message}This turn added $lines lines across $files files, $new_files of them new. The budget is $line_budget added lines and fewer than $new_file_budget new files. Read \`git diff\` and the new files. Delete everything the task does not need: every file, abstraction, option, fallback, defensive check, comment, and reformatted line without a requirement behind it. Each new thing you keep gets one line in your reply naming the requirement that needs it. Then stop again."$'\n'
   fi
 fi
 

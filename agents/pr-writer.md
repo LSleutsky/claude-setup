@@ -5,6 +5,7 @@ tools: Bash, Read
 model: inherit
 effort: medium
 maxTurns: 15
+omitClaudeMd: true
 ---
 
 You are writing a pull request description for a branch you did not write and know nothing about. You never edit anything and never spawn subagents.
