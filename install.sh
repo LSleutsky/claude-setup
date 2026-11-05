@@ -4,7 +4,7 @@
 # Owned by this repo, replaced every run:
 #   1. ~/.claude/CLAUDE.md  rules/  stacks/  hooks/
 #   2. ~/.claude/skills/<name> and ~/.claude/agents/<name>.md for every name in this repo
-#   3. The "permissions.allow", "permissions.ask", "permissions.deny" and "hooks" keys of ~/.claude/settings.json, plus the plugins this repo enables under "enabledPlugins"
+#   3. The "permissions.allow", "permissions.ask", "permissions.deny", "hooks" and "statusLine" keys of ~/.claude/settings.json, plus the plugins this repo enables under "enabledPlugins"
 #
 # Machine-local, never touched:
 #   1. ~/.claude/context/, worklogs/ and docs/ (written by /map, /note, /log, /design-doc)
@@ -87,7 +87,7 @@ find "$target/skills" "$target/agents" -name .DS_Store -delete
 # settings.json: replace only the keys this repo owns. jq's * is a recursive object
 # merge, so machine-local keys such as permissions.additionalDirectories survive.
 existing="{}"
-[ -f "$target/settings.json" ] && existing=$(jq 'del(.permissions.allow, .permissions.ask, .permissions.deny, .permissions.env, .hooks)' "$target/settings.json")
+[ -f "$target/settings.json" ] && existing=$(jq 'del(.permissions.allow, .permissions.ask, .permissions.deny, .permissions.env, .hooks, .statusLine)' "$target/settings.json")
 jq -s '.[0] * .[1]' <(echo "$existing") "$repo_dir/settings.json" >"$target/settings.json.tmp"
 mv "$target/settings.json.tmp" "$target/settings.json"
 

@@ -228,5 +228,9 @@
     "anthropic-skills:pptx": "off",
     "anthropic-skills:skill-creator": "off",
     "anthropic-skills:xlsx": "off"
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "~/.claude/hooks/statusline.sh"
   }
 }

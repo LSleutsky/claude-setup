@@ -31,7 +31,8 @@ set +f
 
 protected='(package-lock\.json|pnpm-lock\.yaml|yarn\.lock|bun\.lockb?|Cargo\.lock|go\.sum|uv\.lock|poetry\.lock|(^|[[:space:]"'"'"'/])migrations?/|(^|[[:space:]"'"'"'/])\.git(/|[[:space:]"'"'"']|$)|\.claude/settings(\.local)?\.json)'
 writes='(^|[^[:alnum:]_-])(rm|mv|cp|tee|truncate|dd)[[:space:]]|sed[[:space:]]+(-[^[:space:]]+[[:space:]]+)*-[[:alnum:]]*i|perl[[:space:]]+-[[:alnum:]]*i|[^0-9&]>'
-if printf '%s' "$command" | grep -Eq "$protected" && printf '%s' "$command" | grep -Eq "$writes"; then
+# A redirect to /dev/null writes nothing, so it must not turn a read of a protected path into a block.
+if printf '%s' "$command" | grep -Eq "$protected" && printf '%s' "$command" | sed -E 's#>[[:space:]]*/dev/null##g' | grep -Eq "$writes"; then
   block "lockfiles, migrations, .git internals and Claude Code settings files change only through their own tool or by the user. Say what must change and stop."
 fi
 
