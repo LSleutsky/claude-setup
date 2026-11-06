@@ -231,6 +231,8 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "~/.claude/hooks/statusline.sh"
+    "command": "~/.claude/hooks/statusline.sh",
+    "padding": 1,
+    "refreshInterval": 60
   }
 }
