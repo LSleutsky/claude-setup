@@ -19,7 +19,7 @@ backups="$HOME/.claude-setup-backups"
 manifest="$target/.claude-setup-manifest"
 
 command -v jq >/dev/null 2>&1 || { echo "jq is required. Install it and rerun." >&2; exit 1; }
-[ -f "$repo_dir/CLAUDE.md" ] || { echo "run this from the setup repo" >&2; exit 1; }
+[ -f "$repo_dir/global.md" ] || { echo "run this from the setup repo" >&2; exit 1; }
 
 # The DirectoryAdded hook behind /add-dir needs Claude Code 2.1.219 or newer. Warn, never fail.
 version_at_least() {
@@ -62,7 +62,7 @@ fi
 
 rm -rf "$target/rules" "$target/stacks" "$target/hooks"
 mkdir -p "$target/rules" "$target/stacks" "$target/hooks"
-cp "$repo_dir/CLAUDE.md" "$target/CLAUDE.md"
+cp "$repo_dir/global.md" "$target/CLAUDE.md"
 cp "$repo_dir"/rules/*.md "$target/rules/"
 cp "$repo_dir"/stacks/*.md "$target/stacks/"
 cp "$repo_dir"/hooks/*.sh "$target/hooks/"

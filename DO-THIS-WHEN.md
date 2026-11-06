@@ -61,6 +61,6 @@
 | When | Why | Command |
 |---|---|---|
 | Same correction twice in a session | Context is polluted with failed attempts | `/clear`, then `/ac` again plus one line on what not to do |
-| Wrong everywhere, not just this repo | The rule belongs to you, not the repo | one sentence in `CLAUDE.md` or the matching `rules/` file, `bash install.sh` |
+| Wrong everywhere, not just this repo | The rule belongs to you, not the repo | one sentence in `global.md` or the matching `rules/` file, `bash install.sh` |
 | A new JS or TS house convention | Lives with the language rules | a bullet under `## Conventions` in `rules/javascript.md`, `bash install.sh` |
 | Monthly | Keep every file earned | delete unflagged rules, stale notes, unused skills (`/skill-doctor`) |
