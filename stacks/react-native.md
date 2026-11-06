@@ -5,7 +5,7 @@ The repo's existing way of doing each of these wins; these apply where it has no
 ## Structure
 
 - Expo Router: the root `_layout.tsx` owns providers, fonts, and splash; each `_layout` owns one navigator; nest navigators only when the UI needs it. Screens are thin and never import the navigator.
-- Feature folders as in the React rules: `features/<name>/` holds a feature's components, hooks, api calls, and types. Route files in `app/` compose them.
+- Follow the repo's layout. When creating a new area where the repo has no pattern, use feature folders as in the React rules: `features/<name>/` holds a feature's components, hooks, api calls, and types. Route files in `app/` compose them.
 - `useLocalSearchParams`, not `useGlobalSearchParams` (it re-renders every background screen). Never name a param `screen`, `params`, `initial`, or `state`.
 - `Stack.Protected` and `Tabs.Protected` gate navigation only; authorization is checked on the server.
 - `<Link href>` for navigation, `router.*` only for conditional logic, typed routes on, never string-built paths.

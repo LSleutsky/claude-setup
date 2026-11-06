@@ -14,10 +14,10 @@ The repo's existing way of doing each of these wins; these apply where it has no
 - An effect only syncs with something outside React (subscriptions, DOM, timers, non-React libraries) and returns its cleanup. Never an effect to compute a value, mirror a prop, or react to a prop change: derive during render, or change the `key` to reset state.
 - Logic an effect calls without retriggering it goes in `useEffectEvent`, declared in the same component, called only from the effect, never listed as a dependency.
 - Data comes from the repo's query library or route loader. Never fetch in an effect. External stores connect through `useSyncExternalStore`. App-once setup lives at module level, not in `useEffect` with an empty dependency array.
-- An async UI path you add defines loading, empty, error, and success. Loading is a Suspense fallback or `isPending`; errors reach an error boundary placed at a logical grouping (a list, a panel), not around every element.
+- Handle only the async states the task can reach. Loading is a Suspense fallback or `isPending`; errors that need handling reach an error boundary placed at a logical grouping (a list, a panel), not around every element.
 - `use(promise)` reads a promise created before render (loader, server, event, cache); never create it during render. `lazy()` is declared at module level and rendered inside Suspense.
 - `ref` is a regular prop; no new `forwardRef`. `<Context value>`, not `<Context.Provider>`. Ref callbacks return their cleanup.
-- Web forms: `<form action={fn}>` with `useActionState` for state and pending; `useFormStatus` from a child rendered inside the form; `useOptimistic` set only inside the action. Expected errors return as state; unexpected ones throw. A form you add has validation, submission states, and labels.
+- Web forms: `<form action={fn}>` with `useActionState` for state and pending; `useFormStatus` from a child rendered inside the form; `useOptimistic` set only inside the action. Expected errors return as state; unexpected ones throw.
 - Reserve layout space with CSS, never with placeholder characters. Images and media carry explicit dimensions.
 
 ## State
