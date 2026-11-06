@@ -78,4 +78,5 @@ parts+=("$(pill 236 "$(printf '$%.2f' "$cost")  $GRY $(hm "$dur")$WHT")")
 [[ -n $d7 ]] && parts+=("$(pill 236 " $(col "$d7")$d7%$WHT $GRY↻ $(left "$d7r")$WHT")")
 
 out=""; for p in "${parts[@]}"; do out+="${out:+ }$p"; done
-printf '%s\n' "$out"
+# Claude Code drops whitespace-only lines, so a bare reset code is what makes the spacer rows survive.
+printf '%s\n%s\n%s\n' "$R" "$out" "$R"
