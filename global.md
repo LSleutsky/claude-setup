@@ -60,6 +60,7 @@ IMPORTANT: the deliverable is the smallest change that does exactly what was ask
 
 - Validate at every trust boundary: request bodies, params, query strings, webhooks, uploads, other services. Inside the boundary, trust the type.
 - Every endpoint, action, and route states its authorization in the plan. Default deny; an unguarded path is a question.
+- Code that handles login, sessions, tokens, cookies, OAuth, redirects from input, or server-side fetches of input URLs follows `~/.claude/rules/security.md`, whatever the file is called; read it first if it is not already loaded.
 - Secrets live in the environment and are read in one place. Never in code, logs, errors, client bundles, or commit messages.
 - Parameterized queries. Never string-build SQL, shell commands, or HTML from input.
 - Stack traces, internal paths, and library messages never leave the server.

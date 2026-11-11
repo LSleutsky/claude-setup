@@ -19,6 +19,7 @@ The repo's existing way of doing each of these wins; these apply where it has no
 - `ref` is a regular prop; no new `forwardRef`. `<Context value>`, not `<Context.Provider>`. Ref callbacks return their cleanup.
 - Web forms: `<form action={fn}>` with `useActionState` for state and pending; `useFormStatus` from a child rendered inside the form; `useOptimistic` set only inside the action. Expected errors return as state; unexpected ones throw.
 - Reserve layout space with CSS, never with placeholder characters. Images and media carry explicit dimensions.
+- Never `dangerouslySetInnerHTML` or `innerHTML` with a value that came from input unless the repo's sanitizer cleaned it. An `href` or `src` built from input is checked to be `http`, `https`, or a relative path.
 
 ## State
 
