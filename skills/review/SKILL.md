@@ -12,7 +12,7 @@ Uncommitted: !`git status --short`
 
 The range is `<base>...HEAD`, every file changed since the branch left the base, plus uncommitted changes.
 
-Invoke the `reviewer` subagent with exactly this instruction and nothing else from this session, except the requirements: "Review `<base>...HEAD` plus uncommitted changes in the current directory. Requirements: <the acceptance criteria or the approved plan from this session, verbatim, or `none given`>."
+Invoke the `reviewer` subagent with model `fable` and exactly this instruction and nothing else from this session, except the requirements: "Review `<base>...HEAD` plus uncommitted changes in the current directory. Requirements: <the acceptance criteria or the approved plan from this session, verbatim, or `none given`>."
 
 Show its numbered list unedited. Add nothing: no commentary, no defense of the code, no recommendation on which to accept. End with one line: "Reply with the numbers to apply, or none."
 

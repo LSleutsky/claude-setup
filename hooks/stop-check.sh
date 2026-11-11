@@ -3,7 +3,7 @@
 # Changed files are every Edit/Write recorded by post-edit-check.sh, plus every file in the launch repo whose uncommitted
 # state differs from the snapshot turn-start.sh took at the prompt, so shell edits count too.
 # Lint and format run through post-edit-check.sh for each changed JS/TS file. Typecheck runs once per repo: a `typecheck` script in the launch directory wins, then one at the repo root, else tsc per nearest tsconfig.json.
-# Budget: more than 150 lines added, or 3 or more new files, blocks the stop once with an order to delete or justify every addition. Removed lines never count.
+# Budget: more than 150 lines added, or 3 or more new files, blocks the stop once with an order to delete or justify every addition. Removed lines and lockfiles never count.
 # Blocking the stop is what makes the deletion pass happen.
 # Exit 2 blocks the stop and feeds stderr to Claude. At most two blocks per turn, so a fix round is re-checked and nothing loops.
 # To add a language: one case branch in post-edit-check.sh and one typecheck function here.
@@ -17,6 +17,7 @@ tmp="${TMPDIR:-/tmp}"
 marker="$tmp/claude-edits-${session_id}"
 snapshot="$tmp/claude-turn-start-${session_id}"
 blocks_file="$tmp/claude-stop-blocks-${session_id}"
+budget_fired="$tmp/claude-stop-budget-${session_id}"
 line_budget=150
 new_file_budget=3
 hooks_dir=$(cd "$(dirname "$0")" && pwd)
@@ -24,6 +25,8 @@ hooks_dir=$(cd "$(dirname "$0")" && pwd)
 blocks=0
 if [ "$(jq -r '.stop_hook_active // false' <<<"$input")" = "true" ]; then
   blocks=$(cat "$blocks_file" 2>/dev/null || printf 0)
+else
+  rm -f "$budget_fired"
 fi
 if [ "$blocks" -ge 2 ]; then
   rm -f "$marker" "$blocks_file" "$snapshot"
@@ -181,10 +184,11 @@ for root in $(printf '%s' "$located" | cut -f1 | sort -u); do
   fi
 done
 
-# The budget runs once per turn, on the first stop.
-if [ "$blocks" -eq 0 ]; then
-  read -r lines new_files files < <(printf '%s\n' "$changes" | awk -F'\t' '{ lines += $1; new += $2; files++ } END { print lines + 0, new + 0, files + 0 }')
+# The budget blocks once per turn, at the first stop that is over it. Lockfiles change only through the package manager and never count.
+if [ ! -f "$budget_fired" ]; then
+  read -r lines new_files files < <(printf '%s\n' "$changes" | awk -F'\t' '$3 !~ /(package-lock\.json|pnpm-lock\.yaml|yarn\.lock|bun\.lockb?|Cargo\.lock|go\.sum|uv\.lock|poetry\.lock)$/ { lines += $1; new += $2; files++ } END { print lines + 0, new + 0, files + 0 }')
   if [ "$lines" -gt "$line_budget" ] || [ "$new_files" -ge "$new_file_budget" ]; then
+    : >"$budget_fired"
     failed=1
     message="${message}This turn added $lines lines across $files files, $new_files of them new. The budget is $line_budget added lines and fewer than $new_file_budget new files. Read \`git diff\` and the new files. Delete everything the task does not need: every file, abstraction, option, fallback, defensive check, comment, and reformatted line without a requirement behind it. Each new thing you keep gets one line in your reply naming the requirement that needs it. Then stop again."$'\n'
   fi

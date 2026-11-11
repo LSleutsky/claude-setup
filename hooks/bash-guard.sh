@@ -2,6 +2,7 @@
 # PreToolUse hook (Bash). Covers what the Read deny rules and write-guard.sh cannot see inside a shell command:
 #
 #   - Any use of a real env file or a credential file (npmrc, netrc, docker and kube configs), and shell writes to lockfiles, migrations, .git internals and Claude Code settings files.
+#   - Git commands that stage, stash, commit, or push behind global options (`git -C . commit`), which the deny rules do not match.
 #
 # Exit 2 blocks and shows stderr to Claude.
 set -u
@@ -28,6 +29,10 @@ for token in $command; do
   esac
 done
 set +f
+
+if printf '%s' "$command" | grep -Eq '(^|[^[:alnum:]_/.-])git([[:space:]]+(-[Cc][[:space:]]+[^[:space:]]+|--?[[:alnum:]-]+(=[^[:space:]]+)?))*[[:space:]]+(add|stage|rm|mv|commit|push|stash)([[:space:]]|$)'; then
+  block "staging, stashing, committing, and pushing are the user's. Reply with the commit message and stop."
+fi
 
 protected='(package-lock\.json|pnpm-lock\.yaml|yarn\.lock|bun\.lockb?|Cargo\.lock|go\.sum|uv\.lock|poetry\.lock|(^|[[:space:]"'"'"'/])migrations?/|(^|[[:space:]"'"'"'/])\.git(/|[[:space:]"'"'"']|$)|\.claude/settings(\.local)?\.json)'
 writes='(^|[^[:alnum:]_-])(rm|mv|cp|tee|truncate|dd)[[:space:]]|sed[[:space:]]+(-[^[:space:]]+[[:space:]]+)*-[[:alnum:]]*i|perl[[:space:]]+-[[:alnum:]]*i|[^0-9&]>'

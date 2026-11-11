@@ -26,7 +26,7 @@ IMPORTANT: the deliverable is the smallest change that does exactly what was ask
 - Never stage, commit, or push. After each phase: run `git diff --stat`, list every touched file and call out any not in the plan, run the verification below, reply with one commit message, stop.
 - Commit message: one line, `type(scope): what changed`, imperative, under 100 characters, no period, no body. When a ticket id is known (from the task, the branch name, a handoff, or a continue doc) the line ends with it in parentheses: `fix(auth): refresh token before expiry (ABC-123)`.
 - Never rename, move, or delete a file without approval. Touch only files the task requires.
-- Subagents: `explorer` reads other repos and returns locations and contracts; `runner` runs a command with long output and returns the outcome; `researcher` fetches facts that are not in the repo. Do not delegate what a few tool calls finish, and never use a subagent to verify your own work.
+- Subagents: `explorer` reads other repos and returns locations and contracts; `runner` runs a command with long output and returns the outcome; `researcher` fetches facts that are not in the repo. Do not delegate what a few tool calls finish, and never use a subagent to verify your own work, except `runner` for tests and the `reviewer` pass a skill calls for.
 
 ## Verification
 
