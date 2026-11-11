@@ -19,7 +19,7 @@ The repo's existing way of doing each of these wins; these apply where it has no
 - To verify a library API exists, grep the package's `.d.ts` under `node_modules`. Not confirmed there means not used.
 - Never lower `strict`, add `ignoreDeprecations`, or widen `include` to make a build pass. TypeScript 6 deprecates `baseUrl`; new path mapping uses `paths`.
 
-## JSDoc
+## JSDoc / Comments
 
 - Single-line comments use `//`. Never `/** text */` on one line.
 - Multi-line comments and all doc comments use the block form: `/**` on its own line, each line starting with ` * `, `*/` on its own line. One short sentence per line.
