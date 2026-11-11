@@ -6,7 +6,7 @@ The repo's existing way of doing each of these wins; these apply where it has no
 - Data is fetched where it is rendered, in Server Components or route handlers. No client-side fetching of data that was available at render time.
 - Mutations are Server Actions or route handlers. Every one validates its input on the server with the validator the repo already uses, and checks authorization itself, because an action is reachable by a direct POST. The client is never trusted.
 - `fetch` is not cached by default. Caching is the `use cache` directive under `cacheComponents: true`: every `use cache` scope sets `cacheLife` explicitly and `cacheTag` for what invalidates it. `revalidateTag(tag, profile)`, never the one-argument form; `updateTag` inside a Server Action when the change must show immediately. Tag-based revalidation over path-based. The plan says whether a route is static or dynamic and why.
-- Add `loading.tsx` or `error.tsx` only when the task needs them. Suspense boundaries sit around the uncached or runtime data access, not the whole page. `error.tsx` is a client component; its `retry` is what the retry button calls.
+- Add `loading.tsx` or `error.tsx` only when the task needs them. Suspense boundaries sit around the uncached or runtime data access, not the whole page. `error.tsx` is a client component; its `retry` (`reset` before 16.3) is what the retry button calls.
 - `next/image`, `next/link`, `next/font`. Never raw `<img>`, never `<a>` for internal navigation.
 - Metadata through the `metadata` export or `generateMetadata`, from Server Components only, never manual `<head>` tags.
 - Secrets are read only in server code, in the data access layer. `NEXT_PUBLIC_` is for values that are safe in the bundle, nothing else.

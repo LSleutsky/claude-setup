@@ -8,7 +8,7 @@ paths:
 The repo's existing way of doing each of these wins; these apply where it has none. They assume React 19.2 or newer: check `package.json` first, and on an older version use that version's API and say so.
 
 - Function components and hooks. The only class is an error boundary, and an existing boundary or `react-error-boundary` comes before writing one.
-- `export default function Component() {}`. One component per file; a small pure helper used only by that component may sit above it.
+- `export default function Component() {}`. One exported component per file; a subcomponent or small pure helper used only by that component sits above it in the same file.
 - Never define a component inside another component: it becomes a new type on every render and resets its state.
 - Components are small and single-purpose. No business logic in JSX; compute above the `return`.
 - An effect only syncs with something outside React (subscriptions, DOM, timers, non-React libraries) and returns its cleanup. Never an effect to compute a value, mirror a prop, or react to a prop change: derive during render, or change the `key` to reset state.

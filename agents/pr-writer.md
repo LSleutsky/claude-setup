@@ -2,7 +2,7 @@
 name: pr-writer
 description: Writes a short, human PR description from a branch's diff. Only invoked by the /pr skill.
 tools: Bash, Read
-model: inherit
+model: sonnet
 effort: medium
 maxTurns: 15
 omitClaudeMd: true

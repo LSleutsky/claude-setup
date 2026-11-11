@@ -66,7 +66,6 @@ The repo's existing way of doing each of these wins; these apply where it has no
 - A row is one element (`accessible`) so the screen reader reads it once.
 - Status changes announce through `AccessibilityInfo.announceForAccessibility` or `accessibilityLiveRegion`; after a screen change focus moves with `AccessibilityInfo.sendAccessibilityEvent(ref, 'focus')`.
 - Respect `isReduceMotionEnabled`. Contrast 4.5:1 for text, 3:1 for UI.
-- Verify with VoiceOver and TalkBack on the changed screens before calling a UI phase done.
 
 ## Testing
 
