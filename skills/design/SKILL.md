@@ -31,7 +31,7 @@ Open         decisions deliberately deferred, with what would force each
 
 ## Rules
 
-- Every line is a decision or a fact, never an option list. If two designs are viable, present the fork as one line under Open, or run `/council` on it.
+- Every line is a decision or a fact, never an option list. If two designs are viable, present the fork as one line under Open.
 - No pattern appears without the constraint that earns it. "Event-driven" needs the line that says why a direct call will not do.
 - Non-goals are mandatory and specific. "Out of scope: auth" is fine; "keep it simple" is not a non-goal.
 - Slice 1 is buildable with `/ac` as written. If it is not, it is too big.

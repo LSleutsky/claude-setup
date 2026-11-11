@@ -31,7 +31,7 @@
 | Writing the PR | Short human description, diff stays out of context | `/pr` |
 | A bug, no ticket | Fix by sequence, not by guessing | `/debug <symptom, trace, file>` |
 | Quick question mid-task | Answer never enters history | `/btw <question>` |
-| Need a fact from docs or the web | Sourced claims only, pages stay out of your session | `/research <question>` |
+| Need a fact from docs or the web | Sourced claims only, pages stay out of your session | ask; `researcher` runs it |
 
 ## Stopping and resuming
 
@@ -54,7 +54,6 @@
 | When | Why | Command |
 |---|---|---|
 | Greenfield | One-page design; slice 1 goes to `/ac` | `/design <what you want>` |
-| A real fork | Three isolated opinions, one verdict | `/council <A or B?>` |
 | A module has absorbed several tickets, or you inherit a repo | Cold look at the shape, not a diff | `/audit [path]` |
 
 ## Corrections
