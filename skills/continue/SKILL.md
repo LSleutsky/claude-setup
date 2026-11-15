@@ -2,7 +2,7 @@
 name: continue
 description: Write the document that lets a fresh session resume this work tomorrow with nothing missing. Manual only.
 disable-model-invocation: true
-argument-hint: "<absolute path to write, e.g. ~/Obsidian/handoffs/ABC-123.md>"
+argument-hint: "[absolute path to write, e.g. ~/Obsidian/handoffs/ABC-123.md; omit to print the document in the reply]"
 allowed-tools: Read Write Bash(git *) Bash(ls *) Bash(date *) Bash(~/.claude/hooks/repo-key.sh) Bash(~/.claude/hooks/base-ref.sh)
 ---
 
@@ -19,11 +19,11 @@ Write to: $ARGUMENTS
 - Uncommitted: !`git status --short`
 - Changed on this branch: !`git diff --stat origin/HEAD...HEAD`
 - Commits on this branch: !`git log --oneline origin/HEAD..HEAD`
-- Plan files, newest first: !`ls -t ~/.claude/plans`
+- Plan files, newest first: !`ls -t ~/.claude/plans 2>/dev/null || true`
 
 ## Task
 
-Write one markdown document at the path above so that a new Claude Code session, with none of this conversation, pastes it into `/ac` and starts at the exact right spot without a single question. Everything it needs is in the document or reachable by a path the document names.
+Write one markdown document, at the path above when one is given, so that a new Claude Code session, with none of this conversation, pastes it into `/ac` and starts at the exact right spot without a single question. Everything it needs is in the document or reachable by a path the document names.
 
 Source of truth, in order: this conversation (the task, the approved plan, what was done, every decision), then the git facts above, then the plan file if this conversation used one. Nothing from memory of other sessions, nothing speculative.
 
@@ -73,5 +73,6 @@ Rules:
 - No code blocks except a contract (request, response, type) the next session codes against.
 - Anything undecided becomes a stated default under Decisions, never an open question.
 - Under 150 lines. ASCII only.
-- Write the file, then reply with its path and the `Next action` line, nothing else.
+- With a path: write the file, then reply with its path and the `Next action` line, nothing else.
+- With no path: write no file. Reply with the whole document in one fenced block tagged `markdown` opened with four backticks, nothing else.
 - If the guard blocks the write, print the whole document in one fenced block tagged `markdown` opened with four backticks, and say: "Run `/add-dir <folder>` once per session, or add the folder to `permissions.additionalDirectories` in `~/.claude/settings.json`, to let me write there."

@@ -21,7 +21,7 @@ Rerun after every pull or edit.
 - `global.md`, installed as `~/.claude/CLAUDE.md`: every session, every machine. Judgement rules only, under 100 lines.
 - `rules/*.md`: when Claude touches a matching file (`paths` in the frontmatter). JavaScript and TypeScript, TypeScript types, React, tests, accessibility, security.
 - `stacks/*.md`: at session start, chosen from `package.json` dependencies, because a `.tsx` screen and a `.tsx` web component look the same. React Native, Next.js, React Router, NestJS, TanStack. In a monorepo every workspace's dependencies count, so a repo with a web app and a mobile app loads both.
-- `hooks/`: deterministic. Format and lint every edit, snapshot the repo at each prompt, and when the turn ends lint, format, and typecheck everything the turn changed by any tool and hold it to a budget of 150 added lines and fewer than 3 new files (over it, the turn cannot end until every addition is deleted or justified). Block env and credential files, lockfiles, settings files, and every git command that stages, stashes, commits, or pushes, prompt before migrations and writes outside the working directories, inject the repo context at start.
+- `hooks/`: deterministic. Snapshot the repo at each prompt, and when the turn ends lint, format, and typecheck everything the turn changed by any tool and hold it to a budget of 150 added lines and fewer than 3 new files (over it, the turn cannot end until every addition is deleted or justified). Block env and credential files, lockfiles, settings files, and every git command that stages, stashes, commits, or pushes, prompt before migrations and writes outside the working directories, inject the repo context at start.
 - Skills with `disable-model-invocation: true` cost nothing until you type them.
 
 ## Writing outside the current repo
@@ -72,13 +72,13 @@ Read the file it shows. Fix anything wrong with `/note` or by editing `~/.claude
 
 ## Daily use
 
-**Any task.** Type it. Claude plans first when the change spans files or the approach is uncertain, and skips the plan when the diff fits in one sentence. Force plan mode with `Shift+Tab`. Edits trigger the format and lint hook silently; ending a turn triggers typecheck if code changed.
+**Any task.** Type it. Claude plans first when the change spans files or the approach is uncertain, and skips the plan when the diff fits in one sentence. Force plan mode with `Shift+Tab`. Ending a turn triggers format, lint, and typecheck if code changed.
 
 **A ticket.** `/ac ABC-123 ticket:` then paste the criteria on the same line, then Enter. Claude reads what the AC touches, lists `TODO`s, batches questions with defaults, gives a phased plan, stops. Approve. After each phase: hooks clean, existing tests run, evidence, a cold `reviewer` pass on the phase, one commit message ending in `(ABC-123)`, you approve review items by number, "next phase" or corrections. Claude never commits.
 
 **Review.** `/review` reviews every file changed since the default branch (origin's `HEAD`, else `main`, `master`, or `develop`) plus uncommitted changes, like a PR review: defects only, over-engineering included, each one verified against the code, at most ten. `No findings.` is the normal result for sound work. Approve by number; it applies only those. The bundled `/code-review` is a free second opinion; only `/code-review ultra` costs money. The bundled `/simplify` hunts for reuse and may extract shared code; the deletion pass is `/review`.
 
-**Stopping for the day mid-plan.** `/continue ~/Obsidian/handoffs/ABC-123.md`. It writes a document with the task, the plan with each phase's status, decisions, what is verified, and the exact next action. Next session, in the same repo: `/ac` and paste the document. It starts at the next action with no questions. The folder must be writable: `/add-dir` it, or put it in `additionalDirectories`.
+**Stopping for the day mid-plan.** `/continue ~/Obsidian/handoffs/ABC-123.md`, or `/continue` alone to print it in the reply. It writes a document with the task, the plan with each phase's status, decisions, what is verified, and the exact next action. Next session, in the same repo: `/ac` and paste the document. It starts at the next action with no questions. The folder must be writable: `/add-dir` it, or put it in `additionalDirectories`.
 
 **A change that needs other repos.** `/handoff`. From the AC and the plan it already knows which repos must change and what each must provide; it reads each target through `explorer`, fills a verified contract, and prints one handoff per repo. Open a session in each repo and paste its handoff into `/ac`. Own plan, own review, own commit messages. Code against a contract only after it landed.
 

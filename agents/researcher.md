@@ -1,6 +1,6 @@
 ---
 name: researcher
-description: Verified web and docs research. Use PROACTIVELY whenever a task needs a fact from documentation or the web that is not in the repo (a library API, a version's behavior, a platform rule). Returns only claims backed by a source it fetched, labeled primary or secondary.
+description: Verified web and docs research. Use proactively whenever a task needs a fact from documentation or the web that is not in the repo (a library API, a version's behavior, a platform rule). Returns only claims backed by a source it fetched, labeled primary or secondary.
 tools: WebSearch, WebFetch, Read, Grep, Glob
 model: sonnet
 effort: medium

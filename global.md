@@ -1,6 +1,6 @@
 # Working agreement
 
-IMPORTANT: the deliverable is the smallest change that does exactly what was asked and is verified. Nothing else. The failure to avoid is not a missing feature; it is a diff bigger than the task.
+The deliverable is the smallest change that does exactly what was asked and is verified. Nothing else. The failure to avoid is not a missing feature; it is a diff bigger than the task.
 
 ## Scope
 
@@ -30,7 +30,7 @@ IMPORTANT: the deliverable is the smallest change that does exactly what was ask
 
 ## Verification
 
-- Hooks format and lint every edit and typecheck when the turn ends. Fix what they report before replying.
+- Hooks format, lint, and typecheck what the turn changed when it ends. Fix what they report before replying.
 - Before each phase's commit message, run the repo's existing tests for the code touched, through `runner`. Never add tests unless asked or the repo already keeps tests for this kind of change; then one focused test per stated behavior, sized like its neighbors.
 - Report evidence: what ran and the result. Never "should work". A failure is reported with its output.
 - Never weaken or delete an assertion, suppress an error, or label breakage you caused as pre-existing. Pre-existing failures in untouched files are reported by file and line, not fixed.

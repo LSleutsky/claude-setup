@@ -16,7 +16,6 @@ The repo's existing way of doing each of these wins; these apply where it has no
 - Index access can be `undefined` under `noUncheckedIndexedAccess`; handle it at the access, not with `!`.
 - No `enum`; a union of string literals or an `as const` object replaces it. When the repo sets `erasableSyntaxOnly`, also no `namespace` with runtime code and no constructor parameter properties. NestJS repos keep their `private readonly` constructor injection.
 - Declare `interface` and `type` directly after the imports, before any other logic.
-- To verify a library API exists, grep the package's `.d.ts` under `node_modules`. Not confirmed there means not used.
 - Never lower `strict`, add `ignoreDeprecations`, or widen `include` to make a build pass. TypeScript 6 deprecates `baseUrl`; new path mapping uses `paths`.
 
 ## JSDoc / Comments

@@ -30,7 +30,7 @@ for token in $command; do
 done
 set +f
 
-if printf '%s' "$command" | grep -Eq '(^|[^[:alnum:]_/.-])git([[:space:]]+(-[Cc][[:space:]]+[^[:space:]]+|--?[[:alnum:]-]+(=[^[:space:]]+)?))*[[:space:]]+(add|stage|rm|mv|commit|push|stash)([[:space:]]|$)'; then
+if printf '%s' "$command" | grep -Eq '(^|[^[:alnum:]_.-])git([[:space:]]+(-[Cc][[:space:]]+[^[:space:]]+|--?[[:alnum:]-]+(=[^[:space:]]+)?))*[[:space:]]+(add|stage|rm|mv|commit|push|stash)([[:space:]]|$)'; then
   block "staging, stashing, committing, and pushing are the user's. Reply with the commit message and stop."
 fi
 
