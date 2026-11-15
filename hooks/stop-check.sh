@@ -3,7 +3,7 @@
 # Changed files are every Edit/Write recorded by post-edit-check.sh, plus every file in the launch repo whose uncommitted
 # state differs from the snapshot turn-start.sh took at the prompt, so shell edits count too.
 # Lint and format run through post-edit-check.sh for each changed JS/TS file. Typecheck runs once per repo: a `typecheck` script in the launch directory wins, then one at the repo root, else tsc per nearest tsconfig.json.
-# Budget: more than 150 lines added, or 3 or more new files, blocks the stop once with an order to delete or justify every addition. Removed lines and lockfiles never count.
+# Budget: more than 150 lines added, or 3 or more new files, blocks the stop once with an order to delete or justify every addition. Removed lines and lockfiles never count. A branch that adds more than 400 lines against its base blocks once on any turn that adds lines, with an order to stop adding and name the split.
 # Blocking the stop is what makes the deletion pass happen.
 # Exit 2 blocks the stop and feeds stderr to Claude. At most two blocks per turn, so a fix round is re-checked and nothing loops.
 # To add a language: one case branch in post-edit-check.sh and one typecheck function here.
@@ -20,6 +20,8 @@ blocks_file="$tmp/claude-stop-blocks-${session_id}"
 budget_fired="$tmp/claude-stop-budget-${session_id}"
 line_budget=150
 new_file_budget=3
+branch_budget=400
+uncounted='(package-lock\.json|pnpm-lock\.yaml|yarn\.lock|bun\.lockb?|Cargo\.lock|go\.sum|uv\.lock|poetry\.lock)$'
 hooks_dir=$(cd "$(dirname "$0")" && pwd)
 
 blocks=0
@@ -186,11 +188,26 @@ done
 
 # The budget blocks once per turn, at the first stop that is over it. Lockfiles change only through the package manager and never count.
 if [ ! -f "$budget_fired" ]; then
-  read -r lines new_files files < <(printf '%s\n' "$changes" | awk -F'\t' '$3 !~ /(package-lock\.json|pnpm-lock\.yaml|yarn\.lock|bun\.lockb?|Cargo\.lock|go\.sum|uv\.lock|poetry\.lock)$/ { lines += $1; new += $2; files++ } END { print lines + 0, new + 0, files + 0 }')
+  read -r lines new_files files < <(printf '%s\n' "$changes" | awk -F'\t' -v uncounted="$uncounted" '$3 !~ uncounted { lines += $1; new += $2; files++ } END { print lines + 0, new + 0, files + 0 }')
   if [ "$lines" -gt "$line_budget" ] || [ "$new_files" -ge "$new_file_budget" ]; then
     : >"$budget_fired"
     failed=1
     message="${message}This turn added $lines lines across $files files, $new_files of them new. The budget is $line_budget added lines and fewer than $new_file_budget new files. Read \`git diff\` and the new files. Delete everything the task does not need: every file, abstraction, option, fallback, defensive check, comment, and reformatted line without a requirement behind it. Each new thing you keep gets one line in your reply naming the requirement that needs it. Then stop again."$'\n'
+  fi
+  # The branch is the PR: everything since it left its base, committed or not, checked on any turn that adds lines.
+  branch_base=$(git -C "$project_root" merge-base "$("$hooks_dir/base-ref.sh")" HEAD 2>/dev/null)
+  if [ "$lines" -gt 0 ] && [ -n "$branch_base" ]; then
+    branch_lines=$({
+      git -C "$project_root" diff --numstat "$branch_base" --
+      git -C "$project_root" ls-files --others --exclude-standard | while IFS= read -r path; do
+        printf '%s\t0\t%s\n' "$(wc -l <"$project_root/$path" 2>/dev/null | tr -d ' ')" "$path"
+      done
+    } | awk -F'\t' -v uncounted="$uncounted" '$3 !~ uncounted { lines += $1 } END { print lines + 0 }')
+    if [ "$branch_lines" -gt "$branch_budget" ]; then
+      : >"$budget_fired"
+      failed=1
+      message="${message}This branch now adds $branch_lines lines against its base. A pull request's budget is $branch_budget added lines. Add nothing more. Delete what no requirement needs, then reply with the total, what is finished and verified, and where the remaining work splits into a separate pull request."$'\n'
+    fi
   fi
 fi
 
