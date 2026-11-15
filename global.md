@@ -21,11 +21,11 @@ The deliverable is the smallest change that does exactly what was asked and is v
 
 ## Workflow
 
-- Plan first (plan mode) when the change spans several files or the approach is uncertain. Skip the plan when the diff fits in one sentence. A plan names each file it touches with the lines it expects to change, names every new file with the reason the task cannot be done without it, and ends with `Not doing:`. Phases are vertical slices; each leaves the build green with one behavior complete and stays under about 150 changed lines, or says in one sentence why not. A branch is one pull request and stays under about 400 added lines; a plan that needs more is split into separate pull requests and only the first is built. A refactor the task requires is its own phase with no behavior change.
+- Plan first (plan mode) when the change spans several files or the approach is uncertain. Skip the plan when the diff fits in one sentence. A plan names each file it touches with the lines it expects to change, names every new file with the reason the task cannot be done without it, and ends with `Not doing:`. Phases are vertical slices; each leaves the build green with one behavior complete and stays under about 150 changed lines, or says in one sentence why not. A pull request is one self-contained change: the least code that works and is verified, with nothing bundled in. Work that is naturally several changes that each merge on their own is planned as several pull requests; never split for its own sake. A refactor the task requires is its own phase with no behavior change.
 - Before the commit message, read `git diff` and delete every line the task did not need: every file, abstraction, option, fallback, check, comment, and blank-line change without a requirement behind it. The Stop hook demands this pass when a turn changes more than its budget.
 - Never stage, commit, or push. After each phase: run `git diff --stat`, list every touched file and call out any not in the plan, run the verification below, reply with one commit message, stop.
 - Commit message: one line, `type(scope): what changed`, imperative, under 100 characters, no period, no body. When a ticket id is known (from the task, the branch name, a handoff, or a continue doc) the line ends with it in parentheses: `fix(auth): refresh token before expiry (ABC-123)`. A message that needs "and" covers two changes: split the phase, or delete the part nobody asked for.
-- Never rename, move, or delete a file without approval. Touch only files the task requires.
+- Never rename, move, or delete a file without approval. Touch only files the task requires. Snapshots, fixtures, and generated files change only when the task requires it.
 - Subagents: `explorer` reads other repos and returns locations and contracts; `runner` runs a command with long output and returns the outcome; `researcher` fetches facts that are not in the repo. Do not delegate what a few tool calls finish, and never use a subagent to verify your own work, except `runner` for tests and the `reviewer` pass a skill calls for.
 
 ## Verification
@@ -37,7 +37,7 @@ The deliverable is the smallest change that does exactly what was asked and is v
 
 ## Code
 
-- Before writing anything, find how this repo already does that kind of thing (the nearest similar component, hook, endpoint, query, form, error path, test) and do it the same way. The repo's established idiom beats the rule files under `~/.claude`; those apply where the repo has no established way. A pattern, library, or layout the repo does not already use enters only through the plan, by name.
+- Before writing anything, find how this repo already does that kind of thing (the nearest similar component, hook, endpoint, query, form, error path, test) and do it the same way. The repo's established idiom beats the rule files under `~/.claude`; those apply where the repo has no established way. Use an existing function, hook, type, constant, or component that already does the job before writing a new one. A pattern, library, or layout the repo does not already use enters only through the plan, by name.
 - Explicit over implicit. The simplest change that is obviously correct. If it deletes code, delete it.
 - Match the file you are in: formatting, import order, naming, how it is organized. The formatter and linter decide; where they are silent, the file decides.
 - Replace, do not deprecate. Published packages are the exception: deprecate in a minor, remove in the next major.
