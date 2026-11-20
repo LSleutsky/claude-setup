@@ -42,7 +42,7 @@ The repo's existing idioms, formatter, and linter win. Where they are silent, th
 - Strict equality. Optional chaining and nullish coalescing over manual null checks.
 - `async` and `await`. No floating promise: await it, return it, or `void` it with a one-line reason. Independent async work runs through `Promise.all`.
 - Throw `Error` or a subclass with a message, never a string or a plain object. Wrapping an error keeps the original as `cause`. `catch (error)` is `unknown`: narrow before use.
-- A function you create takes at most two parameters; more become one object parameter, and a behavior switch is a literal union, never a boolean. Existing signatures stay as they are.
+- An exported function you create with more than three parameters takes one object parameter instead. A boolean parameter that switches what the function does becomes a literal union; a boolean that is the value itself (`setMuted(isMuted)`) stays. Callbacks and functions whose signature a library or API dictates keep that signature. Existing signatures stay as they are.
 - Never mutate a parameter; return a new value.
 - ESM modules. Nothing runs at import time beyond definitions.
 - Built-ins over helper packages: `Array.prototype.at`, `structuredClone`, `Object.groupBy`, `Intl`, `URL`, `AbortController`. No dependency for one function.
