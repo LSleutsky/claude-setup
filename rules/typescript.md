@@ -22,12 +22,14 @@ The repo's existing way of doing each of these wins; these apply where it has no
 
 - Single-line comments use `//`. Never `/** text */` on one line.
 - Multi-line comments and all doc comments use the block form: `/**` on its own line, each line starting with ` * `, `*/` on its own line. One short sentence per line.
-- Required on every exported component, custom hook, and top-level function in a helper, util, or lib file that you create. Never on `useCallback`, `useEffect`, or helpers defined inside a component body.
-- Required on every exported component, custom hook, and exported function in a helper, util, or lib file that you create. Never on anything else: functions inside a component body (handlers, `useCallback`, `useEffect`, helpers), functions nested inside another function.
-- The description is one or two short sentences, one per line, saying what the thing does, not how. Concise, high level, unambiguous.
-- Blank line between the description and the first `@param`. All `@param` lines grouped with no blank lines between them. Blank line between the last `@param` and `@returns`.
-- `@param name - Description`: the name exactly as declared, a hyphen with one space on each side, then the description. No type in braces; the signature carries it. One `@param` per parameter, in declaration order, none omitted.
-- `@returns` always carries the type: `@returns {boolean} Whether the device was paired`.
-- One `@example` only when it significantly improves understanding of a complex function. Blank line between `@example` and `@returns`.
-- Components: a one or two line description, a blank line, then a short `@returns {JSX.Element} ...`.
+- Required on every exported component, custom hook, and exported function you create. Never on anything else: functions inside a component body (handlers, `useCallback`, `useEffect`, helpers), functions nested inside another function, or helpers the module does not export.
+- The description is one or two short sentences saying what the thing does, not how. Add one sentence for anything the signature cannot show: a unit, a valid range, a side effect, or what a null or empty result means.
+- Never restate the signature. No types in braces on `@param` or `@returns`.
+- `@param name - Description` for every parameter, in declaration order, none omitted, with no blank lines between them. The name exactly as declared, a hyphen with one space on each side, then a short description that includes any unit or constraint.
+- `@returns {type} Short Description` on every function that returns a value, saying what it is, including any unit or what null or empty means. Never on components or functions that return nothing.
+- `@throws {ErrorClass} When ...` for each error a caller is expected to handle.
+- `@deprecated` with its replacement, only in a published package.
+- One `@example` only when the function's use is ambiguous or unclear from its name, description, and parameters. Never on components.
+- One blank ` *` line between the description and the first tag, and between tags of different kinds: the `@param` group, `@returns`, `@throws`, and `@example` are each separated by one.
+- Components: a one or two line description and nothing else.
 - Any identifier referenced in JSDoc or a comment goes in backticks.
