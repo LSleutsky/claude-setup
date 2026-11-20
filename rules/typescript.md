@@ -23,7 +23,8 @@ The repo's existing way of doing each of these wins; these apply where it has no
 - Single-line comments use `//`. Never `/** text */` on one line.
 - Multi-line comments and all doc comments use the block form: `/**` on its own line, each line starting with ` * `, `*/` on its own line. One short sentence per line.
 - Required on every exported component, custom hook, and top-level function in a helper, util, or lib file that you create. Never on `useCallback`, `useEffect`, or helpers defined inside a component body.
-- One sentence per line. Short sentences. Concise, high level, unambiguous.
+- Required on every exported component, custom hook, and exported function in a helper, util, or lib file that you create. Never on anything else: functions inside a component body (handlers, `useCallback`, `useEffect`, helpers), functions nested inside another function.
+- The description is one or two short sentences, one per line, saying what the thing does, not how. Concise, high level, unambiguous.
 - Blank line between the description and the first `@param`. All `@param` lines grouped with no blank lines between them. Blank line between the last `@param` and `@returns`.
 - `@param name - Description`: the name exactly as declared, a hyphen with one space on each side, then the description. No type in braces; the signature carries it. One `@param` per parameter, in declaration order, none omitted.
 - `@returns` always carries the type: `@returns {boolean} Whether the device was paired`.
