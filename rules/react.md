@@ -10,7 +10,7 @@ The repo's existing way of doing each of these wins; these apply where it has no
 - Function components and hooks. The only class is an error boundary, and an existing boundary or `react-error-boundary` comes before writing one.
 - `export default function Component() {}`. One exported component per file; a subcomponent or small pure helper used only by that component sits above it in the same file.
 - Never define a component inside another component: it becomes a new type on every render and resets its state.
-- Components are small and single-purpose. No business logic in JSX; compute above the `return`.
+- Components are single-purpose. Split one only when a part is reused or the file mixes unrelated jobs, never for size. No business logic in JSX; compute above the `return`.
 - An effect only syncs with something outside React (subscriptions, DOM, timers, non-React libraries) and returns its cleanup. Never an effect to compute a value, mirror a prop, or react to a prop change: derive during render, or change the `key` to reset state.
 - Logic an effect calls without retriggering it goes in `useEffectEvent`, declared in the same component, called only from the effect, never listed as a dependency.
 - Data comes from the repo's query library or route loader. Never fetch in an effect. External stores connect through `useSyncExternalStore`. App-once setup lives at module level, not in `useEffect` with an empty dependency array.
@@ -40,7 +40,7 @@ The repo's existing way of doing each of these wins; these apply where it has no
 
 Follow the repo's layout. When creating a new area where the repo has no pattern:
 
-- Group by feature, not by type: `features/<name>/` holds that feature's components, hooks, api calls, and types together. A primitive moves to `components/ui/` only once a second feature uses it.
+- Group by feature, not by type: `features/<name>/` holds that feature's components, hooks, api calls, and types together. A primitive moves to `components/ui/` only once a second feature uses it. It starts with the files the task needs, usually one; no hooks, api, or types file until there is code that needs it.
 - Routes and screens are thin: they compose feature components and own no data logic.
 - No barrel `index` files; import from the file. No `utils/` or `helpers/` folder; a helper lives next to its only caller until a third caller exists.
 - Tests sit next to the file they test.
