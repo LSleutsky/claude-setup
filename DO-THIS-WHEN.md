@@ -26,7 +26,7 @@
 | Starting a ticket | Plan, phases, one commit message each, tagged with the ticket | `/ac ABC-123 ticket: <paste criteria>` |
 | Reviewing the plan | Edit it directly instead of describing changes | `Ctrl+G` |
 | After a UI phase | Prove it works at runtime, not just in types | `/verify` |
-| Before a PR, or after a big phase | Cold defect review of everything since the default branch, approve fixes by number | `/review` |
+| Before a PR with more than one `/ac` phase, or a branch not built with `/ac` | Cold defect review of everything since the default branch, approve fixes by number | `/review` |
 | Before a PR that touches auth, sessions, or input handling | Focused security pass over the branch's changes | `/security-review` |
 | Writing the PR | Short human description, diff stays out of context | `/pr` |
 | A bug, no ticket | Fix by sequence, not by guessing | `/debug <symptom, trace, file>` |
