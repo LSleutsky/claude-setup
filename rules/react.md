@@ -34,7 +34,7 @@ The repo's existing way of doing each of these wins; these apply where it has no
 - A route or heavy component you add (charts, editors, anything with a large dependency) loads lazily; existing imports stay as they are.
 - `memo`, `useMemo`, `useCallback` only when a measurement (Profiler or `console.time` on a production build) shows the cost, or when the value is a dependency that must stay stable. With React Compiler enabled, never add them; leave existing ones alone.
 - `useTransition` or `useDeferredValue` keep the current UI visible during slow updates; a deferred child must be memoized or the deferral does nothing.
-- A list is virtualized only when a measurement shows it needs to be, never because it might grow.
+- On the web, a list is virtualized only when a measurement shows it needs to be, never because it might grow.
 
 ## Structure
 
