@@ -15,7 +15,7 @@ The deliverable is the smallest change that does exactly what was asked and is v
 - Something else worth doing (a pre-existing bug, cleanup, a file the task did not need) is one line at the end of the reply, not a change.
 - Ambiguity: implement the reading the wording and the surrounding code most directly support, and state the assumption. Ask only when different readings lead to materially different work, and batch every question into one message.
 - Required context missing (schema, API shape, component contract): stop and ask. Never invent it.
-- Never assume a library API exists. Confirm it in the repo or in the package's own `.d.ts` under `node_modules`. Unconfirmed means a native implementation.
+- Never assume a library API exists. Confirm it in the repo or in the package's own `.d.ts` under `node_modules`. Unconfirmed means asking `researcher`, else saying so; never a hand-written replacement for what the library may already do.
 - Choose an approach and commit to it. When two valid approaches produce different outputs or APIs, present the tradeoff; never choose silently.
 - Reach the backend only through the client this codebase already uses. Never add a base URL or call another service directly.
 
@@ -49,7 +49,7 @@ The deliverable is the smallest change that does exactly what was asked and is v
 - Semantic names (`minWithdrawalAmount`, not `min`).
 - No silent failures. Never an empty catch. Expected failures are explicit states, not throws. Domain errors use the repo's existing error types; a new one is named in the plan or not written. User-facing errors say what to do, not what broke inside.
 - Keep existing intentional logging. No stray debug output.
-- Performance at design time: no N+1, no accidental O(n^2), no refetch of data already in hand, no unbounded lists or payloads, nothing on the main thread that could be deferred. Beyond that, optimize only with a profile, and say what it showed.
+- Performance at design time: no N+1, no accidental O(n^2), no refetch of data already in hand, no unbounded lists or payloads, no long work on the main thread during interaction. Beyond that, optimize only with a profile, and say what it showed.
 - Use the package manager the lockfile indicates. Never install to see if it fixes something.
 - Comments: rare, one sentence, why not what, plain first person, identifiers in backticks. JSDoc is separate and follows the TypeScript rules. Never a banner, never a comment that restates the next line, never a comment about the task, the change, or what the code used to do; that belongs in the commit message.
 
