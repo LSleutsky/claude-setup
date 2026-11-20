@@ -19,7 +19,7 @@ Look for exactly these:
 - Hubs: a module that most others import, holding unrelated things.
 - Scattered concepts: one concept whose logic lives in three or more files with no home.
 - Derived state stored: a value kept in state or a store that could be computed from other state.
-- Unearned indirection: wrappers, adapters, or abstractions with a single caller or a single implementation.
+- Unearned indirection: wrappers, adapters, or abstractions with a single caller or a single implementation. Count callers by grepping the whole tree, including tests, fixtures, config, and string or dynamic references.
 - Boundary leaks: unvalidated input past a trust boundary, internals or secrets crossing to a client.
 
 ## Output
