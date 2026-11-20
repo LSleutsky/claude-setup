@@ -10,7 +10,7 @@ The repo's existing way of doing each of these wins; these apply where it has no
 - Types are the source of truth for data contracts.
 - Never widen a type to bypass an error. Fix the data flow instead of reaching for `any`, a type assertion, or a non-null `!`. Assertions and `!` are erased, never checked; `!` only where the value is provably present on that line.
 - If a suppression is unavoidable, `@ts-expect-error` with the reason on the same line. Never `@ts-ignore`.
-- Data from outside the process (responses, params, storage, `JSON.parse`) is `unknown` until the repo's validator parses it. Infer the type from that schema; never declare the same shape twice.
+- Data from outside the process (responses, params, storage, `JSON.parse`) is `unknown` until the repo's validator parses it. Infer the type from that schema; never declare the same shape twice. With no validator in the repo, a type guard at the boundary; a schema library enters only through the plan.
 - Narrow with type guards and discriminated unions, never with assertions. A `switch` over a union is exhaustive: `default` assigns the value to `never`.
 - `satisfies` checks a literal against a type without widening it: config objects, lookup tables, route maps.
 - Index access can be `undefined` under `noUncheckedIndexedAccess`; handle it at the access, not with `!`.
