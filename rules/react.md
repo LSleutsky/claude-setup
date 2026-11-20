@@ -41,6 +41,6 @@ The repo's existing way of doing each of these wins; these apply where it has no
 Follow the repo's layout. When creating a new area where the repo has no pattern:
 
 - Group by feature, not by type: `features/<name>/` holds that feature's components, hooks, api calls, and types together. A primitive moves to `components/ui/` only once a second feature uses it. It starts with the files the task needs, usually one; no hooks, api, or types file until there is code that needs it.
-- Routes and screens are thin: they compose feature components and own no data logic.
+- Routes and screens load data through their loader and compose components. Logic only one screen uses stays in that screen's file until a second screen needs it.
 - No barrel `index` files; import from the file. No `utils/` or `helpers/` folder; a helper lives next to its only caller until a third caller exists.
 - Tests sit next to the file they test.
