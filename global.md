@@ -7,7 +7,7 @@ The deliverable is the smallest change that does exactly what was asked and is v
 - Only make changes that are directly requested or clearly necessary.
   - No features, refactors, renames, reformatting, or "improvements" beyond the ask. A bug fix fixes the root cause at one site and touches nothing else. A simple feature does not get configurability.
   - No docstrings, comments, or type annotations on code you did not change. Comment only where the logic is not self-evident.
-  - No error handling, fallbacks, defensive checks, or validation for cases current callers cannot hit. Trust internal code and framework guarantees; validate at system boundaries only (user input, external APIs, other services).
+  - No error handling, fallbacks, defensive checks, or validation for cases current callers cannot hit. Trust internal code and framework guarantees; validate at system boundaries only (user input, device and sensor data, external APIs, other services).
   - No helpers, utilities, wrappers, classes, options, interfaces, hooks, stores, or layers for one use. Two or three repeated lines beat a new abstraction. Extract on the third real call site, never before; a call site named in the stated requirements counts as real.
 - A new file, export, type, hook, helper, option, or layer exists only when the task cannot be done without it. When you think one is needed, stop and name it with its reason before writing it; in a plan, it appears by name with the uses that earn it.
 - Every rule in this file, under `rules/`, and in the framework rules constrains the code you write. None of them is a reason to change a line the task did not need; a violation in untouched code is one line at the end of the reply.
@@ -38,9 +38,14 @@ The deliverable is the smallest change that does exactly what was asked and is v
 ## Code
 
 - Before writing anything, find how this repo already does that kind of thing (the nearest similar component, hook, endpoint, query, form, error path, test) and do it the same way. The repo's established idiom beats the rule files under `~/.claude`; those apply where the repo has no established way. Use an existing function, hook, type, constant, or component that already does the job before writing a new one. A pattern, library, or layout the repo does not already use enters only through the plan, by name.
+- Where neither the repo nor the stack rules name a way, a platform or standard-library feature (`<input type="date">`, `Intl`, `URLSearchParams`, `AbortController`) comes before an installed dependency, and both come before code of your own.
 - Explicit over implicit. The simplest change that is obviously correct. If it deletes code, delete it.
+- Before changing a shared function, type, or export, grep every caller. A change that breaks a caller is not done until that caller is updated.
+- Between two changes of equal size, take the one that is correct on edge cases.
+- Keep values in the form the platform or API already gives them. No conversion and back without a reason in the task.
 - Match the file you are in: formatting, import order, naming, how it is organized. The formatter and linter decide; where they are silent, the file decides.
 - Replace, do not deprecate. Published packages are the exception: deprecate in a minor, remove in the next major.
+- Code you move or merge keeps its error handling and validation.
 - Semantic names (`minWithdrawalAmount`, not `min`).
 - No silent failures. Never an empty catch. Expected failures are explicit states, not throws. Domain errors use the repo's existing error types; a new one is named in the plan or not written. User-facing errors say what to do, not what broke inside.
 - Keep existing intentional logging. No stray debug output.
@@ -58,7 +63,7 @@ The deliverable is the smallest change that does exactly what was asked and is v
 
 ## Security
 
-- Validate at every trust boundary: request bodies, params, query strings, webhooks, uploads, other services. Inside the boundary, trust the type.
+- Validate at every trust boundary: request bodies, params, query strings, webhooks, uploads, device and sensor streams, other services. Inside the boundary, trust the type.
 - Every endpoint, action, and route states its authorization in the plan. Default deny; an unguarded path is a question.
 - Code that handles login, sessions, tokens, cookies, OAuth, redirects from input, or server-side fetches of input URLs follows `~/.claude/rules/security.md`, whatever the file is called; read it first if it is not already loaded.
 - Secrets live in the environment and are read in one place. Never in code, logs, errors, client bundles, or commit messages.
