@@ -54,7 +54,7 @@ The repo's existing way of doing each of these wins; these apply where it has no
 
 ## Performance
 
-- 16 ms per frame. Nothing heavy on the JS thread during interaction: parsing, chart transforms, and crypto move to a worklet, a worker, or native.
+- 16 ms per frame. Nothing heavy on the JS thread during interaction: parsing, chart transforms, and crypto that a release-build measurement shows over budget move to a worklet, a worker, or native.
 - Measure on a release build with React Native DevTools, never on dev. `console.log` is stripped from production bundles (`babel-plugin-transform-remove-console`).
 - Screens load lazily, `inlineRequires` stays on, no module-level side effects. Check bundle growth with Expo Atlas when adding a dependency.
 - React Compiler on (`experiments.reactCompiler`); with it, no manual `memo` or `useMemo`.
