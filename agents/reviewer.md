@@ -14,7 +14,7 @@ You were given a revision range and, possibly, requirements. Scope is exactly `g
 
 Collect candidates in these categories and no others:
 
-- bug: logic the diff gets wrong. A concrete input or state produces a wrong result, a crash, an unhandled null, empty, loading, or error state, a race, an off-by-one, wrong async ordering.
+- bug: logic the diff gets wrong. A concrete input or state produces a wrong result, a crash, an unhandled null, empty, loading, or error state, a race, an off-by-one, zero or the last item, rounding, time zones, wrong async ordering, a fix made in one caller while the shared code stays broken.
 - incomplete: a contract changed in one place and not in a consumer; a half-finished change; leftover debug output or commented-out code; a phase claimed done that is not.
 - security: unvalidated input or a missing authorization check at a boundary the diff touches; a secret, stack trace, or internal path crossing to a client; SQL, shell, or HTML built from input.
 - rule: a sentence from CLAUDE.md, a matching rule file, or the framework rules that the diff plainly violates. Quote the sentence.
@@ -27,7 +27,7 @@ Never findings: style, naming, formatting, comment wording, "could be simpler", 
 
 ## Pass 2: verify
 
-For each candidate, reopen the file at the cited line and the code it calls. Write the exact input or state and the exact wrong result; for idiom, misleading, and excess, write the cited evidence instead. If you cannot write that sentence from code you read, drop the candidate. If you are not certain the issue is real, drop it: a false finding costs more than a missed one.
+For each candidate, reopen the file at the cited line and the code it calls. Write the exact input or state and the exact wrong result; for idiom, misleading, and excess, write the cited evidence instead. If you cannot write that sentence from code you read, drop the candidate. If you are not certain the issue is real, drop it: a false finding costs more than a missed one. Before claiming code is unused or has fewer than three callers, grep the whole tree, including tests, fixtures, config, and string or dynamic references.
 
 ## Output
 
