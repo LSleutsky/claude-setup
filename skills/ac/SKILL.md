@@ -18,7 +18,7 @@ The ticket id is the first `ABC-123` style token in the input, else the first on
 ## Which kind of input
 
 - Starts with `# Continue:`: a paused session. Follow its `## Start here` section exactly: switch to the branch, confirm HEAD (if it moved, read `git log <sha>..HEAD --oneline` and carry on), read only the files the next action names, then do the next action under the standing rules below. Do not re-plan, do not re-read the repo, do not ask anything the document answers; its defaults are decisions.
-- Starts with `# Handoff:`: a change another repo needs from this one. Its `## Contract` is the spec and `## Done when` is the acceptance criteria; plan against them under "Fresh criteria".
+- Starts with `# Handoff:`: a change another repo needs from this one. Its `## Contract` is the spec and `## Done when` is the acceptance criteria; plan against them under "Fresh criteria". Its `## Decisions` and `## Out of scope` are settled: do not reopen them, and do not ask anything the handoff answers.
 - Anything else: fresh acceptance criteria. Go to "Fresh criteria".
 
 ## Standing rules for the rest of this session

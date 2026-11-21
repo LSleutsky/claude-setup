@@ -20,6 +20,7 @@ Shape, every section present:
 # Handoff: <one-line change>
 Target repo: `<name>` at `<absolute path>`, base branch `<its default branch>`
 Requested by: `<this repo>` for <ticket id or none>: <one-line task summary>
+Lands after: <the handoff that must land first, by title, or nothing>
 Commit messages: `type(scope): what changed (<ticket id>)`, one line, no body
 
 ## Why
@@ -30,10 +31,16 @@ Commit messages: `type(scope): what changed (<ticket id>)`, one line, no body
 ```ts
 <request, response and error types, verbatim as this repo will code against them>
 ```
-<auth, status codes, pagination, nullability, ordering: whatever the caller depends on, one line each>
+- `<field>`: <what it means, its format or unit, and when it is null or absent>, one line per field
+- `<error>`: <its status and the condition that produces it>, one line per error
+<auth, pagination, ordering, idempotency: whatever else the caller depends on, one line each>
+
+## Decisions
+- <a choice already made about this contract, and why>, one per line; the target does not reopen these
 
 ## Current state in the target
 - `<path:line>`: <what exists now that this touches or extends>
+- `<field>`: <the `path:line` where the target already holds its data, or what the target must add to get it>, one line per new field
 
 ## Done when
 - <checkable criterion, one per line, including the test or call that proves it>
