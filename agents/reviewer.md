@@ -1,6 +1,6 @@
 ---
 name: reviewer
-description: Cold, defect-only review of a diff. Only invoked by the /review skill.
+description: Cold, defect-only review of a diff. Only invoked by the /review and /ac skills.
 tools: Bash, Read, Grep, Glob
 model: inherit
 maxTurns: 60
