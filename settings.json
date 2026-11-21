@@ -210,6 +210,9 @@
     "CLAUDE_CODE_SKIP_PROMPT_HISTORY": "1",
     "CLAUDE_CODE_DISABLE_FILE_CHECKPOINTING": "1"
   },
+  "attribution": {
+    "pr": ""
+  },
   "cleanupPeriodDays": 1,
   "bashEditDiffEnabled": false,
   "skillOverrides": {
