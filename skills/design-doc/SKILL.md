@@ -3,7 +3,7 @@ name: design-doc
 description: Create or update this repo's technical design document from the code. The doc lives under ~/.claude/docs, never in the repo, and is never read into sessions. Manual only.
 disable-model-invocation: true
 argument-hint: "[only for facts not in the branch, commits, or worklog]"
-allowed-tools: Bash(echo *) Bash(test *) Bash(jq *) Bash(grep *) Bash(git *) Bash(f=*) Bash(if *) Bash(~/.claude/hooks/repo-key.sh) Bash(~/.claude/hooks/base-ref.sh)
+allowed-tools: Bash(echo *) Bash(test *) Bash(jq *) Bash(grep *) Bash(git *) Bash(if *) Bash(~/.claude/hooks/repo-key.sh) Bash(~/.claude/hooks/base-ref.sh)
 ---
 
 ## Context
@@ -13,10 +13,8 @@ allowed-tools: Bash(echo *) Bash(test *) Bash(jq *) Bash(grep *) Bash(git *) Bas
 - Repo: !`~/.claude/hooks/repo-key.sh`
 - Version: !`if [ -f package.json ]; then jq -r .version package.json; elif [ -f Cargo.toml ]; then grep -m1 '^version' Cargo.toml | cut -d'"' -f2; elif [ -f pyproject.toml ]; then grep -m1 '^version' pyproject.toml | cut -d'"' -f2; elif git describe --tags --abbrev=0 >/dev/null 2>&1; then git describe --tags --abbrev=0; elif [ -f CHANGELOG.md ]; then grep -m1 -oE '[0-9]+\.[0-9]+\.[0-9]+' CHANGELOG.md; else echo unknown; fi`
 - Feature (branch): !`git branch --show-current`
-- Changed on this branch: !`git diff --name-only origin/HEAD...HEAD | tr '\n' ' '`
-- Ticket ids in branch and commits: !`{ git branch --show-current; git log --format=%s origin/HEAD..HEAD; } | grep -oE '[A-Z]{2,}-[0-9]+' | sort -u | tr '\n' ' '`
-- Commits: !`git log --oneline origin/HEAD..HEAD | tr '\n' ';'`
-- Decided since branch start: !`f="$HOME/.claude/worklogs/$(~/.claude/hooks/repo-key.sh).md"; test -f "$f" && grep -E '^- Decided:' "$f" | tail -n 20 | tr '\n' ';' || true`
+- Ticket ids in branch and commits: !`{ git branch --show-current; git log --format=%s "$(~/.claude/hooks/base-ref.sh)"..HEAD; } | grep -oE '[A-Z]{2,}-[0-9]+' | sort -u | tr '\n' ' '`
+- Commits: !`git log --oneline "$(~/.claude/hooks/base-ref.sh)"..HEAD | tr '\n' ';'`
 - Extra facts from the user: $ARGUMENTS
 
 ## Task
@@ -27,9 +25,8 @@ Invoke the `docwriter` subagent with exactly this instruction, filled from the c
 Maintain the technical design document at <doc path>.
 Repo: <repo>. Exists: <yes/no>. Version: <version>.
 Feature: <branch name without the type prefix>.
-Scope: the changed files listed, plus any paths in the user's facts.
+Scope: the whole repo, plus any paths in the user's facts.
 Requirements: the ticket ids listed, plus any in the user's facts.
-Decisions: the Decided lines listed.
 User facts: <arguments, or none>.
 ```
 
