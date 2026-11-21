@@ -17,8 +17,8 @@ Write to: $ARGUMENTS
 - Base: !`~/.claude/hooks/base-ref.sh`
 - Date: !`date +%Y-%m-%d`
 - Uncommitted: !`git status --short`
-- Changed on this branch: !`git diff --stat origin/HEAD...HEAD`
-- Commits on this branch: !`git log --oneline origin/HEAD..HEAD`
+- Changed on this branch: !`git diff --stat "$(~/.claude/hooks/base-ref.sh)"...HEAD || true`
+- Commits on this branch: !`git log --oneline "$(~/.claude/hooks/base-ref.sh)"..HEAD || true`
 - Plan files, newest first: !`ls -t ~/.claude/plans 2>/dev/null || true`
 
 ## Task
