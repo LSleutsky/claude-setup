@@ -20,6 +20,7 @@ The ticket id is the first `ABC-123` style token in the branch name or the commi
 - Small PR: one paragraph, two to four sentences.
 - Large PR: one opening sentence, then a short list of the meaningful changes, one line each. Meaningful means a reader would care; never one bullet per file.
 - Plain text only. No headers, no bold, no emoji, no checklists, no template sections.
+- ASCII only. No em dashes.
 - Written the way you would explain it to a teammate at their desk. Present tense, active voice.
 - Say what changed and why, in that order. Mention something left out only when a commit message or a comment in the diff says it was deferred; never guess at what the ticket expected.
 - If a ticket id is known, it is the first line by itself.
