@@ -74,8 +74,9 @@ changes=$(changes_since_snapshot)
 if [ -f "$marker" ]; then
   while IFS=$'\t' read -r _ path; do
     [ -n "$path" ] || continue
+    # An empty root falls back to `.`, or the pattern would be `/*` and claim every path.
     case "$path" in
-      "$project_root"/*) [ -n "$project_root" ] && [ -f "$snapshot" ] && { printf '%s' "$changes" | grep -qF "	$path" || changes="${changes}"$'\n'"0	0	$path"; } ;;
+      "${project_root:-.}"/*) [ -f "$snapshot" ] && { printf '%s' "$changes" | grep -qF "	$path" || changes="${changes}"$'\n'"0	0	$path"; } ;;
       *) changes="${changes}"$'\n'"$(change_for_recorded_edit "$path")" ;;
     esac
   done <"$marker"

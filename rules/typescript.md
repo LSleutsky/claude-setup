@@ -24,7 +24,6 @@ The repo's existing way of doing each of these wins; these apply where it has no
 - Multi-line comments and all doc comments use the block form: `/**` on its own line, each line starting with ` * `, `*/` on its own line. One short sentence per line.
 - Required on every exported component, custom hook, and exported function you create. Never on anything else: functions inside a component body (handlers, `useCallback`, `useEffect`, helpers), functions nested inside another function, or helpers the module does not export.
 - The description is one or two short sentences saying what the thing does, not how. Add one sentence for anything the signature cannot show: a unit, a valid range, a side effect, or what a null or empty result means.
-- Never restate the signature. No types in braces on `@param` or `@returns`.
 - `@param name - Description` for every parameter, in declaration order, none omitted, with no blank lines between them. The name exactly as declared, a hyphen with one space on each side, then a short description that includes any unit or constraint.
 - `@returns {type} Short Description` on every function that returns a value, saying what it is, including any unit or what null or empty means. Never on components or functions that return nothing.
 - `@throws {ErrorClass} When ...` for each error a caller is expected to handle.
