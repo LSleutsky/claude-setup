@@ -13,7 +13,7 @@ Recent changes: !`git log --oneline -10`
 
 Sequence. Do not skip a step or reorder them.
 
-1. Reproduce, or state precisely why you cannot. No fix without a reproduction or an explicit reason.
+1. Reproduce with one command you have run and can rerun, and show its output, or state precisely why you cannot. No fix without a reproduction or an explicit reason.
 2. Read the trace or symptom and name the failing line. If there is no trace, name the boundary where the wrong value first appears.
 3. Check whether a recent change above touched that path.
 4. State one hypothesis for the root cause, in one sentence, before touching code.
