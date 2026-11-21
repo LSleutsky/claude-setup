@@ -13,6 +13,7 @@ The repo's existing test style wins: its runner, its helpers, its file placement
 - Arrange, act, assert, in that order, visibly.
 - Never mock the unit under test. Mock only what crosses a real boundary (network, clock, storage).
 - Assert on outcomes, not on calls, unless the call is the contract.
+- Expected values are literals or worked examples, never recomputed the way the code computes them: `expect(add(a, b)).toBe(a + b)` cannot fail.
 - No conditionals or loops inside a test body.
 - Existing tests define current behavior; changing one is a behavior change and is called out as such.
 - No snapshot tests for UI; assert the behavior the user sees. End-to-end flows live in the repo's E2E tool, not in unit tests.
