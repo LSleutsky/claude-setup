@@ -24,7 +24,7 @@ Look for exactly these:
 
 ## Output
 
-A numbered list, most costly to leave first. Each item is exactly two lines:
+A numbered list, most costly to leave first. Cost is churn: commits per file from `git log --since=6.months --format= --name-only -- <path> | sort | uniq -c | sort -rn`, so a finding in files that keep changing outranks one in files nobody touches; a `leak` ranks first whatever its churn. Each item is exactly two lines:
 
 ```
 1. path (and path, if two)  [cycle|backward|duplicate|two-ways|hub|scattered|derived|unearned|leak]  what is wrong
