@@ -57,6 +57,8 @@
       "Bash(pnpm install *)",
       "Bash(pnpm remove *)",
       "Bash(pnpm publish *)",
+      "Bash(vp install *)",
+      "Bash(vp add *)",
       "Bash(yarn add *)",
       "Bash(yarn install *)",
       "Bash(yarn remove *)",
