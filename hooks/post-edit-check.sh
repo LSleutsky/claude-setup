@@ -3,7 +3,7 @@
 # Without the flag (stop-check.sh), formats and lints the one file, wherever it is.
 # Language is chosen by extension; each tool runs only if the file's repo has it, so a repo without the tool is silently untouched.
 # Tools are found in the nearest node_modules/.bin from the file up to its repo root, so monorepo packages and other repos work.
-# The first formatter found wins (oxfmt, biome, prettier); every linter found runs (oxlint, eslint, else biome).
+# The first formatter found wins (oxfmt, vp, biome, prettier); every linter found runs (oxlint or else vp, eslint, else biome).
 # Exit 2 shows stderr to Claude so it fixes the errors itself.
 # Also records every edit as "family<TAB>path" so stop-check.sh knows what to typecheck and what to measure.
 # stop-check.sh runs this script itself for files a shell command changed, so lint has one implementation.
@@ -50,6 +50,8 @@ run_tool() {
 
 if formatter=$(find_tool oxfmt) && [ -n "$formatter" ]; then
   run_tool "$formatter" "$file_path" >/dev/null 2>&1
+elif formatter=$(find_tool vp) && [ -n "$formatter" ]; then
+  run_tool "$formatter" fmt "$file_path" >/dev/null 2>&1
 elif formatter=$(find_tool biome) && [ -n "$formatter" ]; then
   run_tool "$formatter" format --write "$file_path" >/dev/null 2>&1
 elif formatter=$(find_tool prettier) && [ -n "$formatter" ]; then
@@ -61,6 +63,10 @@ linters=()
 oxlint=$(find_tool oxlint)
 eslint=$(find_tool eslint)
 [ -n "$oxlint" ] && linters+=("$oxlint"$'\t')
+if [ -z "$oxlint" ]; then
+  vp=$(find_tool vp)
+  [ -n "$vp" ] && linters+=("$vp"$'\t'lint)
+fi
 [ -n "$eslint" ] && linters+=("$eslint"$'\t')
 if [ "${#linters[@]}" -eq 0 ]; then
   biome=$(find_tool biome)
